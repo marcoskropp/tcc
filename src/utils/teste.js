@@ -23,11 +23,29 @@ function generateSequence(quantityOfButtons, quantityOfSequence) {
     return sequence;
 }
 
-function touched(landmark, button) {
+function touched1(landmark, button) {
     return landmark.x > button.x &&
       landmark.x < button.x + button.width &&
       landmark.y > button.y &&
       landmark.y < button.y + button.height &&
+      button.canTrigger
+      ? true
+      : false;
+}
+
+
+function touched(landmarkIndicator,landmarkThumb, button) {
+    return landmarkIndicator.x > button.x &&
+        landmarkThumb.x > button.x &&
+      landmarkIndicator.x < button.x + button.width &&
+      landmarkThumb.x < button.x + button.width &&
+
+      landmarkIndicator.y > button.y &&
+      landmarkThumb.y > button.y &&
+
+      landmarkIndicator.y < button.y + button.height &&
+      landmarkThumb.y < button.y + button.height &&
+
       button.canTrigger
       ? true
       : false;
@@ -39,11 +57,20 @@ function invertCoordinates(x, y) {
     return { x , y }
 }
 
+function getOffset(el) {
+    const rect = el.getBoundingClientRect();
+    return {
+      left: rect.left + window.scrollX,
+      top: rect.top + window.scrollY
+    };
+  }
+
 export { 
     TOTAL_ROUNDS, 
     COLORS, 
     getRandomInt, 
     generateSequence, 
     touched, 
-    invertCoordinates 
+    invertCoordinates,
+    getOffset
 }
