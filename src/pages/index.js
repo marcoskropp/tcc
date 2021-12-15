@@ -131,15 +131,13 @@
 
 // camera.start();
 import { 
-  TOTAL_ROUNDS, COLORS, getRandomInt, generateSequence, touched, 
+  TOTAL_ROUNDS, COLORS, getRandomInt, generateSequence, touched, invertCoordinates,
   getInitialState, getInitialRoundState
 } from '../utils/index.js'
 
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
-
-
 
 const state = getInitialState();
 const roundState = getInitialRoundState();
@@ -173,9 +171,7 @@ function render(results) {
       const thumbY = landmarks[4].y * canvasElement.height; 
       const landmarkThumb = { x: thumbX, y: thumbY };
       // console.log(landmarkThumb.x)
-
-
-
+      console.log(landmarkThumb)
       // const initButton = document.getElementsByClassName("init-button")[0];
       // initButton.style.position = "absolute";
       // initButton.style.left = (indicatorX + initGameButton.x) +'px';
@@ -207,16 +203,16 @@ function render(results) {
       } if(Math.abs(indicatorX - thumbX) > 50
       && Math.abs(indicatorY - thumbY) > 50 
       && state.dragIsActive) {
-        console.log('selectedButtonDrag',selectedButtonDrag)
+        // console.log('selectedButtonDrag',selectedButtonDrag)
         state.dragIsActive = false;
        
         state.selectedButtonDrag.className = null  
-        console.log('state.selectedButtonDrag',state.selectedButtonDrag)
+        // console.log('state.selectedButtonDrag',state.selectedButtonDrag)
 
       }
 
       if (touched(landmark, initGameButton) && state.dragIsActive && !state.selectedButtonDrag.className) {
-        console.log('aquiasd')
+        // console.log('aquiasd')
         state.selectedButtonDrag = initGameButton;
 
         state.selectedButtonDrag.className = 'init-button'  
@@ -238,12 +234,28 @@ function render(results) {
       }
 
       if(state.dragIsActive) {
-        console.log(state)
+        // console.log(state)
       }
 
       if(state.dragIsActive && state.selectedButtonDrag.className === 'init-button') {
         const element = document.getElementsByClassName(state.selectedButtonDrag.className)[0];
-        console.log('aqui123',element.style.top, indicatorY)
+        // console.log('aqui123',element.style.top, indicatorY)
+
+
+
+
+
+
+
+
+// aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+// criar um "tradutor" -> regra de três -> 0 -> 1280 e 0 -> 720, 
+// assim não preciso ficar calculando a diferença toda vez
+
+
+
+
+
 
         element.style.position = "absolute";
         element.style.left = (-indicatorX + 800) +'px';
@@ -282,7 +294,7 @@ function render(results) {
       // console.log(teste1.clientHeight)
 
       if (touched(landmark, teste) && state.dragIsActive  && !state.selectedButtonDrag.className) {
-        // console.log('aqui')
+        console.log('aqui')
         state.selectedButtonDrag = teste;
 
         state.selectedButtonDrag.className = 'cat'  
@@ -305,7 +317,7 @@ function render(results) {
 
       if(state.dragIsActive && state.selectedButtonDrag.className === 'cat') {
         const element = document.getElementsByClassName(state.selectedButtonDrag.className)[0];
-        console.log('aqui1',element.style.top, indicatorY)
+        // console.log('aqui1',element.style.top, indicatorY)
 
 
         // const element = document.getElementsByClassName(state.selectedButtonDrag.className)[0];
@@ -317,11 +329,11 @@ function render(results) {
         // element.style.left = (-indicatorX) +'px';
 
         element.style.position = "absolute";
-        element.style.left = (-indicatorX + 1500) +'px';
-        element.style.top = (indicatorY + 80)+'px';
+        element.style.left = (-indicatorX + 1250) +'px';
+        element.style.top = (indicatorY - 0)+'px';
 
         state.teste.x = indicatorX - 100
-        state.teste.y = indicatorY - 130
+        state.teste.y = indicatorY 
         // element.style.left = (-indicatorX) +'px';
         // element.style.top = (indicatorY)+'px';
 

@@ -43,12 +43,21 @@ const getInitialState = () => {
       active: false,
       canTrigger: true,
     },
-    teste: {
+    /*teste: {
       name: 'teste',
       x: 0,
       y: 200,
       width: 130,
       height: 150,
+      active: false,
+      canTrigger: true,
+    },*/
+    teste: {
+      name: 'teste',
+      x: 1140,
+      y: 10,
+      width: 230,
+      height: 75,
       active: false,
       canTrigger: true,
     },

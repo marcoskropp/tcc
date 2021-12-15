@@ -33,4 +33,17 @@ function touched(landmark, button) {
       : false;
 }
 
-export { TOTAL_ROUNDS, COLORS, getRandomInt, generateSequence, touched }
+function invertCoordinates(x, y) {
+    x = 1280 - x 
+    y = 720 - y
+    return { x , y }
+}
+
+export { 
+    TOTAL_ROUNDS, 
+    COLORS, 
+    getRandomInt, 
+    generateSequence, 
+    touched, 
+    invertCoordinates 
+}

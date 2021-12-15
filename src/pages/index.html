@@ -13,22 +13,33 @@
 <body>
 
   <div class="container">
-    <div class="hands-view">  
-      <div class="enable-hands">
+
+    <video class="input_video"></video>
+    <div class="canvas-container">
+      <img class="dog" src="../assets/dog.png" />
+      <img class="cat" src="../assets/cat.png" />
+
+      <canvas class="output_canvas" width="1280px" height="720px">
+    </div>  
+
+
+    <div class="hands-view invisible">  
+      
+      <div class="enable-hands invisible">
         <div class="hand-icon-container">
         <i class="far fa-hand-point-right hand-icon"></i>
       </div>
         <p>Toque aqui!</p>
       </div>
-      <div class="help-view">
+
+      <div class="help-view invisible">
         <div class="help-container">
           <i class="far fa-question-circle question-icon"></i>
         </div>
         <p>Toque aqui!</p>
       </div>
+
       <div class="help-explanation invisible">
-
-
         <div class="how-to-play">
           <h2>Como jogar?</h2>
             <p>O jogo tem como objetivo testar a memória do usuário, nele o jogador é apresentado
@@ -38,15 +49,10 @@
               errar nenhum elemento ele será declarado vencedor. 
             </p>
         </div>
-        
       </div>
-      <video class="input_video"></video>
-      <div class="canvas-container">
-        <canvas class="output_canvas" width="1280px" height="720px">
-      </div>  
+      
     </div>
 
-    <img class="cat" src="../assets/cat.png" />
 
     <div class="round invisible">
       <h2>Rodada <h2 id="round">1</h2></h2>
@@ -86,7 +92,7 @@
 
 
 
-    <div class="dashboard">
+    <div class="dashboard invisible">
       <h2>Bem Vindo!</h2>
       <h1>Genious Game</h1>
       <div class="init-button" id="init-button">
@@ -94,7 +100,7 @@
       </div>
     </div>
 
-    <div class="developed-by">
+    <div class="developed-by invisible">
       <h4>Desenvolvido por</h4>
       <h3>Marcos Kropp</h3>
     </div>
