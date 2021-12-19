@@ -5,12 +5,12 @@ let actualSequenceLenght = 4;
 const getInitialState = () => {
   return {
     dragIsActive: false, 
-    // selectedButtonDrag: {
-    //   name: 'selectedButtonDrag',
-    //   className: null,
-    //   x: null,
-    //   y: null,
-    // },
+    selectedButtonDrag: {
+      name: 'selectedButtonDrag',
+      className: null,
+      x: null,
+      y: null,
+    },
     // handTriggerButton: {
     //   x: 1050,
     //   y: 20,
