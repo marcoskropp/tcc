@@ -1,6 +1,6 @@
 import { 
   TOTAL_ROUNDS, COLORS, getRandomInt, generateSequence, touched, invertCoordinates,
-  getInitialState, getInitialRoundState, getOffset, isInsideSquare,getRandomCoordinate
+  getInitialState, getInitialRoundState, getOffset, isInsideSquare,getRandomCoordinate, images
 } from '../utils/index.js'
 
 const videoElement = document.getElementsByClassName('input_video')[0];
@@ -10,19 +10,54 @@ const canvasCtx = canvasElement.getContext('2d');
 const state = getInitialState();
 const roundState = getInitialRoundState()
 
-const coordinate = getRandomCoordinate()
-state.teste.x = coordinate.x
-state.teste.y = coordinate.y
-console.log(coordinate)
-var img = new Image();
-img.src = '../assets/owl.png';
-img.className = 'cat'
-img.style.left = coordinate.x + 'px';
-img.style.top = coordinate.y + 'px';
+let buttonsState = {}
 
-  document.getElementsByClassName("canvas-container")[0].appendChild(img);
-const createButton = () => {
+const isValidCoordinate = (coordinate) => {
+  Object.assign(coordinate, { width: 125, height: 75 })
+
+  const buttonStateKeys = Object.keys(buttonsState)
+ 
+  let isValidCoordinate = true
+
+  for(let i = 0; i < buttonStateKeys.length; i++) {
+    if(isInsideSquare(coordinate, buttonsState[buttonStateKeys[i]])) {
+      isValidCoordinate = false
+    }
+  }
+
+  return isValidCoordinate
+}
+
+const createButton = (imageName) => {
+  let coordinate 
+  let validCoordinate = false
+  while(!validCoordinate) {
+    coordinate = getRandomCoordinate()
+
+    if(isValidCoordinate(coordinate)) {
+      validCoordinate = true
+    }
+  }
+
+  buttonsState[imageName] = { 
+    className: imageName,
+    x: coordinate.x,
+    y: coordinate.y,
+    width: 125,
+    height: 75,
+    active: false,
+    canTrigger: true,
+   }
+
+  const img = new Image();
+  img.src = `../assets/${imageName}.png`;
+  img.className = imageName
+  img.style.left = coordinate.x + 'px';
+  img.style.top = coordinate.y + 'px';
+  img.style.width = '125px'
+  img.style.height = '75px'
   
+  document.getElementsByClassName("canvas-container")[0].appendChild(img);
 }
 
 const verifyDrag = ({ indicatorX, indicatorY, thumbX, thumbY }) => {
@@ -43,17 +78,21 @@ const verifyDrag = ({ indicatorX, indicatorY, thumbX, thumbY }) => {
 const verifyTouchedAndDrag = (landmarkIndicator, landmarkThumb, button) => {
   if (touched(landmarkIndicator, landmarkThumb, button)  && state.dragIsActive  && !state.selectedButtonDrag.className) {
     state.selectedButtonDrag.className = button.className
-    state.selectedButtonDrag.name = button.name
+    state.selectedButtonDrag.name = button.className
   }
 
   if(state.dragIsActive && state.selectedButtonDrag.className === button.className) {
     const element = document.getElementsByClassName(state.selectedButtonDrag.className)[0];
-    element.style.left = (landmarkIndicator.x) +'px';
-    element.style.top = (landmarkIndicator.y) +'px';
+    element.style.left = (landmarkIndicator.x) + 'px';
+    element.style.top = (landmarkIndicator.y) + 'px';
 
-    state[button.name].x = landmarkIndicator.x
-    state[button.name].y = landmarkIndicator.y
+    buttonsState[button.className].x = landmarkIndicator.x
+    buttonsState[button.className].y = landmarkIndicator.y
   }
+}
+
+for(let i = 0 ; i < images.length; i++){
+  createButton(images[i])
 }
 
 function render(results) {
@@ -61,7 +100,6 @@ function render(results) {
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
   
-  const { teste, teste1 } = state;
 
   const { squares: { topLeft, topRight, bottomLeft, bottomRight } } = roundState;
 
@@ -78,27 +116,34 @@ function render(results) {
 
      
       verifyDrag({indicatorX, indicatorY, thumbX, thumbY})
+      console.log(buttonsState['cat'])
 
-      verifyTouchedAndDrag(landmark, landmarkThumb, teste)
+      const buttonStateKeys = Object.keys(buttonsState)
+
+      for(let i = 0; i < buttonStateKeys.length; i++) {
+          verifyTouchedAndDrag(landmark, landmarkThumb, buttonsState[buttonStateKeys[i]])
+          if(isInsideSquare(topLeft, buttonsState[buttonStateKeys[i]])) {
+          console.log('here', buttonStateKeys[i])
+        }
+      }
+
       // verifyTouchedAndDrag(landmark, landmarkThumb, teste1)
 
       // console.log('here123123',teste)
 
-      if(isInsideSquare(topLeft, teste)) {
-        console.log('here',teste)
-      }
+      
 
-      if(isInsideSquare(topRight, teste)) {
-        console.log('hereasdasd',teste)
-      }
-      // console.log('here',teste)
-      if(isInsideSquare(bottomLeft, teste)) {
-        console.log('here123123',teste)
-      }
+      // if(isInsideSquare(topRight, teste)) {
+      //   console.log('hereasdasd',teste)
+      // }
+      // // console.log('here',teste)
+      // if(isInsideSquare(bottomLeft, teste)) {
+      //   console.log('here123123',teste)
+      // }
 
-      if(isInsideSquare(bottomRight, teste)) {
-        console.log('here123123',teste)
-      }
+      // if(isInsideSquare(bottomRight, teste)) {
+      //   console.log('here123123',teste)
+      // }
 
 
       // criar gerador de fases, onde tem-se um array com todos os botões da fase,

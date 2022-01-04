@@ -55,7 +55,9 @@ function touched(landmarkIndicator,landmarkThumb, button) {
 function isInsideSquare(square, button) {
   // square = invertCoordinates(square)
   // button = invertCoordinates(button)
-  return (square.x + square.width > button.x) && (square.x < button.x) && (square.y + square.height > button.y) && (square.y < button.y)
+  return (square.x + square.width > button.x) &&
+  (square.x < button.x) && (square.y + square.height > button.y) &&
+  (square.y < button.y)
   return !(button.x > square.width
       || button.width < square.x
       || button.y > square.height

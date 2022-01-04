@@ -2,6 +2,8 @@ import { generateSequence } from './teste.js'
 
 let actualSequenceLenght = 4;
 
+const images = ['cat', 'dog', 'cobra', 'cow', 'wolf', 'tiger', 'shark', 'turtle', 'owl', 'horse', 'hen']
+
 const getInitialState = () => {
   return {
       // handTriggerButton: {
@@ -121,4 +123,4 @@ const getInitialRoundState = () => {
   
   
 
-  export { getInitialState, getInitialRoundState }
+  export { getInitialState, getInitialRoundState, images }
