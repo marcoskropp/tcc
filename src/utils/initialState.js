@@ -4,14 +4,7 @@ let actualSequenceLenght = 4;
 
 const getInitialState = () => {
   return {
-    dragIsActive: false, 
-    selectedButtonDrag: {
-      name: 'selectedButtonDrag',
-      className: null,
-      x: null,
-      y: null,
-    },
-    // handTriggerButton: {
+      // handTriggerButton: {
     //   x: 1050,
     //   y: 20,
     //   width: 130,
@@ -52,6 +45,13 @@ const getInitialState = () => {
       active: false,
       canTrigger: true,
     },*/
+    dragIsActive: false, 
+    selectedButtonDrag: {
+      name: 'selectedButtonDrag',
+      className: null,
+      x: null,
+      y: null,
+    },
     teste: {
       name: 'teste',
       className: 'cat',
@@ -82,36 +82,36 @@ const getInitialRoundState = () => {
     actualUserSequence: [],
     userTime: false,
     round: 1,
-    buttons: {
-      topLeftCorner: {
-        x: 650,
-        y: 270,
-        width: 150,
-        height: 150,
+    squares: {
+      topLeft: {
+        x: 0,
+        y: 0,
+        width: 300,
+        height: 300,
         active: false,
         canTrigger: true,
       },
-      topRightCorner: {
-        x: 480,
-        y: 270,
-        width: 150,
-        height: 150,
+      topRight: {
+        x: 900,
+        y: 0,
+        width: 300,
+        height: 300,
         active: false,
         canTrigger: true,
       },
-      bottomLeftCorner: {
-        x: 650,
-        y: 450,
-        width: 150,
-        height: 150,
+      bottomLeft: {
+        x: 0,
+        y: 380,
+        width: 300,
+        height: 300,
         active: false,
         canTrigger: true,
       },
-      bottomRightCorner: {
-        x: 480,
-        y: 450,
-        width: 150,
-        height: 150,
+      bottomRight: {
+        x: 980,
+        y: 380,
+        width: 300,
+        height: 300,
         active: false,
         canTrigger: true,
       },

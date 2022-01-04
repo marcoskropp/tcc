@@ -1,6 +1,6 @@
 import { 
   TOTAL_ROUNDS, COLORS, getRandomInt, generateSequence, touched, invertCoordinates,
-  getInitialState, getInitialRoundState, getOffset
+  getInitialState, getInitialRoundState, getOffset, isInsideSquare,getRandomCoordinate
 } from '../utils/index.js'
 
 const videoElement = document.getElementsByClassName('input_video')[0];
@@ -8,13 +8,30 @@ const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
 
 const state = getInitialState();
+const roundState = getInitialRoundState()
 
-const verifyDrag = ({indicatorX, indicatorY, thumbX, thumbY}) => {
+const coordinate = getRandomCoordinate()
+state.teste.x = coordinate.x
+state.teste.y = coordinate.y
+console.log(coordinate)
+var img = new Image();
+img.src = '../assets/owl.png';
+img.className = 'cat'
+img.style.left = coordinate.x + 'px';
+img.style.top = coordinate.y + 'px';
+
+  document.getElementsByClassName("canvas-container")[0].appendChild(img);
+const createButton = () => {
+  
+}
+
+const verifyDrag = ({ indicatorX, indicatorY, thumbX, thumbY }) => {
   if(Math.abs(indicatorX - thumbX) <= 50
   && Math.abs(indicatorY - thumbY) <= 50 
   && !state.dragIsActive) {
     state.dragIsActive = true;
   } 
+
   if(Math.abs(indicatorX - thumbX) > 50
   && Math.abs(indicatorY - thumbY) > 50 
   && state.dragIsActive) {
@@ -29,11 +46,8 @@ const verifyTouchedAndDrag = (landmarkIndicator, landmarkThumb, button) => {
     state.selectedButtonDrag.name = button.name
   }
 
-
   if(state.dragIsActive && state.selectedButtonDrag.className === button.className) {
     const element = document.getElementsByClassName(state.selectedButtonDrag.className)[0];
-    // console.log('here')
-    // console.log('element.x',getOffset(element), element.width)
     element.style.left = (landmarkIndicator.x) +'px';
     element.style.top = (landmarkIndicator.y) +'px';
 
@@ -49,14 +63,16 @@ function render(results) {
   
   const { teste, teste1 } = state;
 
+  const { squares: { topLeft, topRight, bottomLeft, bottomRight } } = roundState;
+
   if (results.multiHandLandmarks) {
     for (const landmarks of results.multiHandLandmarks) {
-      let indicatorX = -(landmarks[8].x * canvasElement.width)+1280;
+      let indicatorX = -(landmarks[8].x * canvasElement.width) + 1280;
       const indicatorY = landmarks[8].y * canvasElement.height;
       
       const landmark = { x: indicatorX, y: indicatorY };
 
-      const thumbX = -(landmarks[4].x * canvasElement.width)+1280;
+      const thumbX = -(landmarks[4].x * canvasElement.width) + 1280;
       const thumbY = landmarks[4].y * canvasElement.height; 
       const landmarkThumb = { x: thumbX, y: thumbY };
 
@@ -64,7 +80,26 @@ function render(results) {
       verifyDrag({indicatorX, indicatorY, thumbX, thumbY})
 
       verifyTouchedAndDrag(landmark, landmarkThumb, teste)
-      verifyTouchedAndDrag(landmark, landmarkThumb, teste1)
+      // verifyTouchedAndDrag(landmark, landmarkThumb, teste1)
+
+      // console.log('here123123',teste)
+
+      if(isInsideSquare(topLeft, teste)) {
+        console.log('here',teste)
+      }
+
+      if(isInsideSquare(topRight, teste)) {
+        console.log('hereasdasd',teste)
+      }
+      // console.log('here',teste)
+      if(isInsideSquare(bottomLeft, teste)) {
+        console.log('here123123',teste)
+      }
+
+      if(isInsideSquare(bottomRight, teste)) {
+        console.log('here123123',teste)
+      }
+
 
       // criar gerador de fases, onde tem-se um array com todos os botões da fase,
       // gerados aleatóriamente, através de uma função que gera o x e y aleatorio, 
