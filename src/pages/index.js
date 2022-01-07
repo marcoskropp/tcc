@@ -1,6 +1,7 @@
 import { 
-  TOTAL_ROUNDS, COLORS, getRandomInt, generateSequence, touched, invertCoordinates,
-  getInitialState, getInitialRoundState, getOffset, isInsideSquare,getRandomCoordinate, images
+  TOTAL_ROUNDS, COLORS, getRandomInt, generateSequence, touched, 
+  invertCoordinates, getInitialState, getInitialRoundState, getOffset, 
+  isInsideSquare, getRandomCoordinate, images, classifications
 } from '../utils/index.js'
 
 const videoElement = document.getElementsByClassName('input_video')[0];
@@ -91,9 +92,94 @@ const verifyTouchedAndDrag = (landmarkIndicator, landmarkThumb, button) => {
   }
 }
 
-for(let i = 0 ; i < images.length; i++){
-  createButton(images[i])
+let usedAnimals = []
+
+const getValidAnimal = (animals) => {
+  const index = getRandomInt(0, (animals.length -1))
+
+  if(!usedAnimals.find((animal) => animal === animals[index])) {
+    return animals[index]
+
+  }
+
+  return getValidAnimal(animals)
 }
+
+const firstPhase = () => {
+  const vertebrates = classifications.vertebrates
+  const invertebrates = classifications.invertebrates
+  
+  for(let i = 0; i < 5; i++) {
+    const validVertebrate = getValidAnimal(vertebrates)
+    const validInvertebrate = getValidAnimal(invertebrates)
+
+    createButton(validVertebrate)
+    createButton(validInvertebrate)
+
+    usedAnimals.push(validVertebrate)
+    usedAnimals.push(validInvertebrate)
+  }
+} 
+
+const secondPhase = () => {
+  const mammals = classifications.mammals
+  const oviparous = classifications.oviparous
+  const vertebrates = classifications.vertebrates
+
+  for(let i = 0; i < 4; i++) {
+    const validMammal = getValidAnimal(mammals)
+    const validOviparou = getValidAnimal(oviparous)
+    const validVertebrate = getValidAnimal(vertebrates)
+
+    const { squares: { bottomLeft } } = roundState;
+
+    bottomLeft.canTrigger = true
+
+    const element = document.getElementsByClassName(bottomLeft.className)[0];
+    element.classList.remove('invisible')
+    
+    createButton(validMammal)
+    createButton(validOviparou)
+    createButton(validVertebrate)
+
+    usedAnimals.push(validMammal)
+    usedAnimals.push(validOviparou)
+    usedAnimals.push(validVertebrate)
+  }
+} 
+
+const thirdPhase = () => {
+  const mammals = classifications.mammals
+  const oviparous = classifications.oviparous
+  const vertebrates = classifications.vertebrates
+  // adicionar mais classificações
+
+  for(let i = 0; i < 4; i++) {
+    
+    const validMammal = getValidAnimal(mammals)
+    const validOviparou = getValidAnimal(oviparous)
+    const validVertebrate = getValidAnimal(vertebrates)
+
+    const { squares: { bottomLeft, bottomRight } } = roundState;
+
+    bottomLeft.canTrigger = true
+    bottomRight.canTrigger = true
+
+    const bottomLeftElement = document.getElementsByClassName(bottomLeft.className)[0];
+    bottomLeftElement.classList.remove('invisible')
+    const bottomRightElement = document.getElementsByClassName(bottomRight.className)[0];
+    bottomRightElement.classList.remove('invisible')
+
+    createButton(validMammal)
+    createButton(validOviparou)
+    createButton(validVertebrate)
+
+    usedAnimals.push(validMammal)
+    usedAnimals.push(validOviparou)
+    usedAnimals.push(validVertebrate)
+  }
+} 
+thirdPhase()
 
 function render(results) {
   canvasCtx.save();
@@ -144,12 +230,6 @@ function render(results) {
       // if(isInsideSquare(bottomRight, teste)) {
       //   console.log('here123123',teste)
       // }
-
-
-      // criar gerador de fases, onde tem-se um array com todos os botões da fase,
-      // gerados aleatóriamente, através de uma função que gera o x e y aleatorio, 
-      // porém, verificando se não está em cima de algum outro botão já inserido no array
-      // e também cuidando a parte de extrapolação de bordas (1270 x 710)
 
 
       drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS,

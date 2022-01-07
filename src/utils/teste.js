@@ -58,10 +58,10 @@ function isInsideSquare(square, button) {
   return (square.x + square.width > button.x) &&
   (square.x < button.x) && (square.y + square.height > button.y) &&
   (square.y < button.y)
-  return !(button.x > square.width
-      || button.width < square.x
-      || button.y > square.height
-      || button.height < square.y);
+  // return !(button.x > square.width
+  //     || button.width < square.x
+  //     || button.y > square.height
+  //     || button.height < square.y);
 }
 
 
