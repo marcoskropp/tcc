@@ -67,6 +67,13 @@ const classifications = {
   invertebrates: invertebrates,
 }
 
+const classificationsTranslate = {
+  mammals: 'Mamíferos',
+  oviparous: 'Ovíparos',
+  vertebrates: 'Vertebrados',
+  invertebrates: 'Invertebrados'
+}
+
 const getInitialState = () => {
   return {
       // handTriggerButton: {
@@ -101,41 +108,12 @@ const getInitialState = () => {
     //   active: false,
     //   canTrigger: true,
     // },
-    /*teste: {
-      name: 'teste',
-      x: 0,
-      y: 200,
-      width: 130,
-      height: 150,
-      active: false,
-      canTrigger: true,
-    },*/
     dragIsActive: false, 
     selectedButtonDrag: {
       name: 'selectedButtonDrag',
       className: null,
       x: null,
       y: null,
-    },
-    teste: {
-      name: 'teste',
-      className: 'cat',
-      x: 50,
-      y: 50,
-      width: 125,
-      height: 75,
-      active: false,
-      canTrigger: true,
-    },
-    teste1: {
-      name: 'teste1',
-      className: 'dog',
-      x: 150,
-      y: 150,
-      width: 125,
-      height: 125,
-      active: false,
-      canTrigger: true,
     },
     shoudlShowHandConnectors: false,
   };
@@ -144,30 +122,50 @@ const getInitialState = () => {
 const getInitialRoundState = () => {
   return {
     colorSequence: generateSequence(4, actualSequenceLenght),
-    actualUserSequence: [],
+    usedAnimals: [],
     userTime: false,
     round: 1,
+    buttons: {
+      submit: {
+        className: 'submit',
+        x: 565,
+        y: 600,
+        width: 150,
+        height: 40,
+        active: false,
+        canTrigger: true,
+      },
+    },
+    roundSquares: {
+      topLeftAnimals: [],
+      topRightAnimals: [],
+      bottomLeftAnimals: [],
+      bottomRightAnimals: []
+    },
     squares: {
       topLeft: {
         className: 'top-left-square',
+        name: 'topLeft',
         x: 0,
         y: 0,
         width: 300,
         height: 300,
         active: false,
-        canTrigger: true,
+        canTrigger: false,
       },
       topRight: {
         className: 'top-right-square',
+        name: 'topRight',
         x: 900,
         y: 0,
         width: 300,
         height: 300,
         active: false,
-        canTrigger: true,
+        canTrigger: false,
       },
       bottomLeft: {
         className: 'bottom-left-square',
+        name: 'bottomLeft',
         x: 0,
         y: 380,
         width: 300,
@@ -177,6 +175,7 @@ const getInitialRoundState = () => {
       },
       bottomRight: {
         className: 'bottom-right-square',
+        name: 'bottomRight',
         x: 980,
         y: 380,
         width: 300,
@@ -190,4 +189,10 @@ const getInitialRoundState = () => {
   
   
 
-  export { getInitialState, getInitialRoundState, images, classifications }
+  export { 
+    getInitialState, 
+    getInitialRoundState, 
+    images, 
+    classifications,
+    classificationsTranslate
+  }

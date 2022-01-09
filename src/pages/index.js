@@ -1,7 +1,8 @@
 import { 
   TOTAL_ROUNDS, COLORS, getRandomInt, generateSequence, touched, 
   invertCoordinates, getInitialState, getInitialRoundState, getOffset, 
-  isInsideSquare, getRandomCoordinate, images, classifications
+  isInsideSquare, getRandomCoordinate, images, classifications,
+  classificationsTranslate
 } from '../utils/index.js'
 
 const videoElement = document.getElementsByClassName('input_video')[0];
@@ -76,13 +77,22 @@ const verifyDrag = ({ indicatorX, indicatorY, thumbX, thumbY }) => {
   }
 }
 
-const verifyTouchedAndDrag = (landmarkIndicator, landmarkThumb, button) => {
-  if (touched(landmarkIndicator, landmarkThumb, button)  && state.dragIsActive  && !state.selectedButtonDrag.className) {
+const verifyTouched = (landmarkIndicator, landmarkThumb, button) => {
+  if (touched(landmarkIndicator, landmarkThumb, button)  
+  && state.dragIsActive  
+  && !state.selectedButtonDrag.className) {
     state.selectedButtonDrag.className = button.className
     state.selectedButtonDrag.name = button.className
+    return true
   }
+  return false
+}
 
-  if(state.dragIsActive && state.selectedButtonDrag.className === button.className) {
+const verifyTouchedAndDrag = (landmarkIndicator, landmarkThumb, button) => {
+  verifyTouched(landmarkIndicator, landmarkThumb, button)
+
+  if(state.dragIsActive 
+    && state.selectedButtonDrag.className === button.className) {
     const element = document.getElementsByClassName(state.selectedButtonDrag.className)[0];
     element.style.left = (landmarkIndicator.x) + 'px';
     element.style.top = (landmarkIndicator.y) + 'px';
@@ -92,12 +102,10 @@ const verifyTouchedAndDrag = (landmarkIndicator, landmarkThumb, button) => {
   }
 }
 
-let usedAnimals = []
-
 const getValidAnimal = (animals) => {
   const index = getRandomInt(0, (animals.length -1))
 
-  if(!usedAnimals.find((animal) => animal === animals[index])) {
+  if(!roundState.usedAnimals.find((animal) => animal === animals[index])) {
     return animals[index]
 
   }
@@ -105,49 +113,113 @@ const getValidAnimal = (animals) => {
   return getValidAnimal(animals)
 }
 
-const firstPhase = () => {
-  const vertebrates = classifications.vertebrates
-  const invertebrates = classifications.invertebrates
+const setVisibileElement = (button, text) => {
+  const element = document.getElementsByClassName(button.className)[0];
   
-  for(let i = 0; i < 5; i++) {
-    const validVertebrate = getValidAnimal(vertebrates)
-    const validInvertebrate = getValidAnimal(invertebrates)
-
-    createButton(validVertebrate)
-    createButton(validInvertebrate)
-
-    usedAnimals.push(validVertebrate)
-    usedAnimals.push(validInvertebrate)
+  if(element.classList.contains('invisible')) {
+    element.classList.remove('invisible')
   }
+
+  if(text) {
+    const elementText = document.getElementsByClassName(`${button.className}-text`)[0];
+    elementText.textContent = text
+  }
+}
+
+const setInvisibleElement = (button) => {
+  const element = document.getElementsByClassName(button.className)[0];
+  
+  if(!element.classList.contains('invisible')) {
+    element.classList.add('invisible')
+  }
+}
+
+const generateAnimal = (classificatedAnimals) => {
+  const animal = getValidAnimal(classificatedAnimals)
+  createButton(animal)
+  roundState.usedAnimals.push(animal)
+}
+
+let actualPhase = {
+  squares: {}, 
+  classifications: {}, 
+  classificationsTranslate: {},
+  quantityOfAnimalsPerSquare: 0
+}
+
+const generatePhase = ({
+  squares, 
+  classifications, 
+  classificationsTranslate,
+  quantityOfAnimalsPerSquare
+}) => {
+  const classificationsKeys = Object.keys(classificationsTranslate)
+  const squaresKeys = Object.keys(squares)
+
+  actualPhase = {
+    squares, 
+    classifications, 
+    classificationsTranslate,
+    quantityOfAnimalsPerSquare
+  }
+
+  for(let i = 0; i < squaresKeys.length; i++) {
+    setVisibileElement(squares[squaresKeys[i]], classificationsTranslate[classificationsKeys[i]])
+    for(let j = 0; j < quantityOfAnimalsPerSquare; j++) {
+      generateAnimal(classifications[classificationsKeys[i]])
+    }
+  }
+}
+
+const firstPhase = () => {
+  const { squares: { topRight, topLeft } } = roundState;
+
+  const squares = { topRight, topLeft }
+
+  const classificationsTranslateSelected = { 
+    vertebrates: classificationsTranslate.vertebrates, 
+    invertebrates: classificationsTranslate.invertebrates
+   }
+
+   const classificationsSelected = {
+    vertebrates: classifications.vertebrates, 
+    invertebrates: classifications.invertebrates
+   }
+
+  generatePhase({ 
+    squares, 
+    classificationsTranslate: classificationsTranslateSelected,  
+    classifications: classificationsSelected, 
+    quantityOfAnimalsPerSquare: 1
+  })
 } 
 
 const secondPhase = () => {
-  const mammals = classifications.mammals
-  const oviparous = classifications.oviparous
-  const vertebrates = classifications.vertebrates
+  const { squares: { topRight, topLeft, bottomLeft } } = roundState;
 
-  for(let i = 0; i < 4; i++) {
-    const validMammal = getValidAnimal(mammals)
-    const validOviparou = getValidAnimal(oviparous)
-    const validVertebrate = getValidAnimal(vertebrates)
+  const squares = { topRight, topLeft, bottomLeft }
 
-    const { squares: { bottomLeft } } = roundState;
-
-    bottomLeft.canTrigger = true
-
-    const element = document.getElementsByClassName(bottomLeft.className)[0];
-    element.classList.remove('invisible')
-    
-    createButton(validMammal)
-    createButton(validOviparou)
-    createButton(validVertebrate)
-
-    usedAnimals.push(validMammal)
-    usedAnimals.push(validOviparou)
-    usedAnimals.push(validVertebrate)
+  const classificationsTranslateSelected = { 
+    mammals: classificationsTranslate.mammals,
+    oviparous: classificationsTranslate.oviparous,
+    vertebrates: classificationsTranslate.vertebrates
   }
+   
+  const classificationsSelected = {
+    mammals: classifications.mammals,
+    oviparous: classifications.oviparous,
+    vertebrates: classifications.vertebrates
+  }
+
+  generatePhase({ 
+    squares, 
+    classificationsTranslate: classificationsTranslateSelected,  
+    classifications: classificationsSelected, 
+    quantityOfAnimalsPerSquare: 3
+  })
 } 
 
+/*
 const thirdPhase = () => {
   const mammals = classifications.mammals
   const oviparous = classifications.oviparous
@@ -174,18 +246,110 @@ const thirdPhase = () => {
     createButton(validOviparou)
     createButton(validVertebrate)
 
-    usedAnimals.push(validMammal)
-    usedAnimals.push(validOviparou)
-    usedAnimals.push(validVertebrate)
+    roundState.usedAnimals.push(validMammal)
+    roundState.usedAnimals.push(validOviparou)
+    roundState.usedAnimals.push(validVertebrate)
   }
 } 
-thirdPhase()
+*/
+firstPhase()
+
+const verifySquare = (square, index) => {
+  const buttonStateKeys = Object.keys(buttonsState)
+
+  if(isInsideSquare(square, buttonsState[buttonStateKeys[index]])) {
+    const animalsInSquare = roundState.roundSquares[`${square.name}Animals`]
+
+    if(animalsInSquare && !animalsInSquare.find(
+      (animal) => animal === buttonStateKeys[index])
+    ) {
+      roundState.roundSquares[`${square.name}Animals`].push(buttonStateKeys[index])
+
+    }
+  }
+}
+
+const verifyResults = () => {
+  const { 
+    squares: { 
+      topLeft, topRight, bottomLeft, bottomRight 
+    }, 
+  } = roundState;
+  const buttonStateKeys = Object.keys(buttonsState)
+
+  for(let i = 0; i < buttonStateKeys.length; i++) {
+    verifySquare(topLeft, i)
+    verifySquare(topRight, i)
+    verifySquare(bottomLeft, i)
+    verifySquare(bottomRight, i)
+  }
+
+  let wrongAnimals = []
+  let rightSquareCounter = 0;
+
+  for(let i = 0; i < buttonStateKeys.length; i++) {
+    let wrongSquareCounter = 0;
+
+    const teste = !!roundState.roundSquares.topLeftAnimals.find(
+      (animal) => animal === buttonStateKeys[i]
+    )
+    console.log('actualPhase: ', actualPhase, 'roundState: ', roundState)
+
+    if(teste) {
+      const classificationsKeys = Object.keys(actualPhase.classificationsTranslate)
+      console.log(actualPhase.classifications)
+      console.log('classificationsKeys[0]',classificationsKeys[0])
+      const rightSquare = !!actualPhase.classifications[classificationsKeys[0]].find(
+        (animal) => animal === buttonStateKeys[i])
+      
+      if(rightSquare) {
+        rightSquareCounter++
+        console.log('rightSquareCounterLeft',rightSquareCounter)
+
+      }
+    } else {
+      wrongSquareCounter++
+    }
+
+    const teste1 = !!roundState.roundSquares.topRightAnimals.find(
+      (animal) => animal === buttonStateKeys[i]
+    )
+
+    if(teste1) {
+      const classificationsKeys = Object.keys(actualPhase.classificationsTranslate)
+
+      const rightSquare = !!actualPhase.classifications[classificationsKeys[1]].find(
+        (animal) => animal === buttonStateKeys[i]
+      )
+      if(rightSquare) {
+        console.log('rightSquareCounter',rightSquareCounter)
+        rightSquareCounter++
+      }
+      
+    } else {
+      wrongSquareCounter++
+    }
+    if(wrongSquareCounter > 1) {
+      wrongAnimals.push(buttonStateKeys[i])
+    }
+
+
+  }
+  console.log(rightSquareCounter, buttonStateKeys.length)
+
+  if(rightSquareCounter === buttonStateKeys.length) {
+    console.log('==============huhuhkuh')
+  } else {
+    console.log(wrongAnimals)
+  }
+  //roundSquares.topLeft.find((animal) => animal === buttonStateKeys[i])
+
+}
 
 function render(results) {
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
-  
 
   const { squares: { topLeft, topRight, bottomLeft, bottomRight } } = roundState;
 
@@ -201,16 +365,34 @@ function render(results) {
       const landmarkThumb = { x: thumbX, y: thumbY };
 
      
-      verifyDrag({indicatorX, indicatorY, thumbX, thumbY})
-      console.log(buttonsState['cat'])
+      verifyDrag({ indicatorX, indicatorY, thumbX, thumbY })
 
       const buttonStateKeys = Object.keys(buttonsState)
 
+      let allInsideSquares = true
       for(let i = 0; i < buttonStateKeys.length; i++) {
-          verifyTouchedAndDrag(landmark, landmarkThumb, buttonsState[buttonStateKeys[i]])
-          if(isInsideSquare(topLeft, buttonsState[buttonStateKeys[i]])) {
-          console.log('here', buttonStateKeys[i])
+        verifyTouchedAndDrag(landmark, landmarkThumb, buttonsState[buttonStateKeys[i]])
+        
+        if(!isInsideSquare(topLeft, buttonsState[buttonStateKeys[i]])
+        && !isInsideSquare(topRight, buttonsState[buttonStateKeys[i]])
+        && !isInsideSquare(bottomLeft, buttonsState[buttonStateKeys[i]]) 
+        && !isInsideSquare(bottomRight, buttonsState[buttonStateKeys[i]])) { 
+          allInsideSquares = false
         }
+      }
+
+      const { buttons: { submit } } = roundState
+      const submitElement = document.getElementsByClassName(submit.className)[0];
+      if(allInsideSquares) {
+        setVisibileElement(submitElement)
+        const isSubmitButtonTouched = verifyTouched(landmark, landmarkThumb, submit)
+        console.log('isSubmitButtonTouched', isSubmitButtonTouched)
+        if(isSubmitButtonTouched) {
+          verifyResults()
+        }
+      } 
+      if(!allInsideSquares && !submitElement.classList.contains('invisible')) {
+        setInvisibleElement(submitElement)
       }
 
       // verifyTouchedAndDrag(landmark, landmarkThumb, teste1)

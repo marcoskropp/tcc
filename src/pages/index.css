@@ -74,7 +74,7 @@ p {
 }
 
 img {
-  z-index: 3;
+  z-index: 100;
   position: absolute;
   width: 150px;
   right: 400px;
@@ -86,7 +86,7 @@ img {
 .enable-hands {
   width: 130px;
   position: absolute;
-  z-index: 1;
+  z-index: 99;
   margin-left: 100px;
   background-color: rgb(245, 245, 245);
   justify-content: center;
@@ -111,7 +111,7 @@ img {
 
 .round {
   position: absolute;
-  z-index: 2;
+  z-index: 99;
   top: 0;
   margin-top: 130px;
   display: flex;
@@ -131,7 +131,7 @@ img {
 
 .game {
   position: absolute;
-  z-index: 2;
+  z-index: 99;
   align-items: center;
   margin-top: 250px;
   opacity: 0.9;
@@ -152,26 +152,21 @@ img {
 
 .top-left-corner {
   background-color: red;
-  z-index: 2;
   border-radius: 100% 5px 5px;
 }
 
 .top-right-corner {
-  z-index: 2;
   background-color: yellow;
-
   border-radius: 5px 100% 5px 5px;
 }
 
 .bottom-left-corner {
   background-color: green;
-
   border-radius: 5px 5px 5px 100%;
 }
 
 .bottom-right-corner {
   background-color: blue;
-
   border-radius: 5px 5px 100% 5px;
 }
 
@@ -181,7 +176,7 @@ img {
 
 .lost-game {
   position: absolute;
-  z-index: 1;
+  z-index: 100;
   background-color: rgb(245, 245, 245);
   justify-content: center;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
@@ -194,7 +189,7 @@ img {
 
 .win-game {
   position: absolute;
-  z-index: 1;
+  z-index: 100;
   background-color: rgb(245, 245, 245);
   justify-content: center;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
@@ -207,7 +202,7 @@ img {
 
 .pass-round-game {
   position: absolute;
-  z-index: 1;
+  z-index: 100;
   background-color: rgb(245, 245, 245);
   justify-content: center;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
@@ -217,8 +212,6 @@ img {
   margin-top: 225px;
 }
 
-
-
 .game-content1 {
   display: flex;
   flex-wrap: wrap;
@@ -226,20 +219,26 @@ img {
   margin: auto;
   width: 800px;
   justify-content: space-between;
-
 }
-
 
 .square {
   background-color: blue;
-
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   display: flex;
   flex-wrap: wrap;
   height: 125px;
   width: 125px;
+  align-items: center;
+  justify-content: center;
 }
 
+.square-text {
+  text-align: center;
+  font-size: 35px;
+  color: white;
+  opacity: 1;
+  text-transform: uppercase;
+}
 
 .developed-by {
   position: absolute;
@@ -276,7 +275,7 @@ img {
   position: absolute;
   right: 0;
   bottom: 0;
-  z-index: 2;
+  z-index: 99;
   margin-right: 350px;
   margin-bottom: 250px;
   background-color: rgb(245, 245, 245);
@@ -307,7 +306,7 @@ img {
   position: absolute;
   right: 0;
   bottom: 0;
-  z-index: 1;
+  z-index: 99;
   margin-right: 320px;
   margin-bottom: 180px;
   opacity: 0.9;
@@ -333,7 +332,7 @@ img {
 }
 
 .invisible {
-  display: none;
+  display: none !important
 }
 
 .hands-view {
@@ -358,7 +357,7 @@ img {
   transform: scale(-1, 1);
 }
   
-.cat {
+/* .cat {
   position: fixed;
   z-index: 1000000;
   left: 50px;
@@ -374,14 +373,14 @@ img {
   top: 150px;
   width: 125px;
   height: auto;
-}
+} */
 
 .square {
   width: 300px;
   height: 300px;
-  opacity: 0.4;
+  opacity: 0.8;
   position: absolute;
-  z-index: 100000;
+  z-index: 98;
 }
 
 .top-left-square {
@@ -410,7 +409,7 @@ img {
   align-items: center;
   justify-content: center;
   position: absolute;
-  z-index: 100000;
+  z-index: 100;
   margin-left: 565px;
   margin-top: 600px;
   background-color: rgb(245, 245, 245);
@@ -422,8 +421,8 @@ img {
 
 .button {
   position: fixed;
-  z-index: 1000000;
+  z-index: 100;
   width: 125px;
   height: auto;
-
 }
+
