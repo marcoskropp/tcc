@@ -1,8 +1,11 @@
 import { 
   TOTAL_ROUNDS, COLORS, getRandomInt, generateSequence, touched, 
-  invertCoordinates, getInitialState, getInitialRoundState, getOffset, 
+  getInitialState, getInitialRoundState, getOffset, 
   isInsideSquare, getRandomCoordinate, images, classifications,
-  classificationsTranslate
+  classificationsTranslate, isValidCoordinate, verifyDrag, createButton,
+  verifyTouched, verifyTouchedAndDrag, getValidAnimal, generateAnimal, 
+  generatePhase, setVisibileElement, setInvisibleElement, validateSquare,
+  verifyRightSquare, verifySquare
 } from '../utils/index.js'
 
 const videoElement = document.getElementsByClassName('input_video')[0];
@@ -14,161 +17,11 @@ const roundState = getInitialRoundState()
 
 let buttonsState = {}
 
-const isValidCoordinate = (coordinate) => {
-  Object.assign(coordinate, { width: 125, height: 75 })
-
-  const buttonStateKeys = Object.keys(buttonsState)
- 
-  let isValidCoordinate = true
-
-  for(let i = 0; i < buttonStateKeys.length; i++) {
-    if(isInsideSquare(coordinate, buttonsState[buttonStateKeys[i]])) {
-      isValidCoordinate = false
-    }
-  }
-
-  return isValidCoordinate
-}
-
-const createButton = (imageName) => {
-  let coordinate 
-  let validCoordinate = false
-  while(!validCoordinate) {
-    coordinate = getRandomCoordinate()
-
-    if(isValidCoordinate(coordinate)) {
-      validCoordinate = true
-    }
-  }
-
-  buttonsState[imageName] = { 
-    className: imageName,
-    x: coordinate.x,
-    y: coordinate.y,
-    width: 125,
-    height: 75,
-    active: false,
-    canTrigger: true,
-   }
-
-  const img = new Image();
-  img.src = `../assets/${imageName}.png`;
-  img.className = imageName
-  img.style.left = coordinate.x + 'px';
-  img.style.top = coordinate.y + 'px';
-  img.style.width = '125px'
-  img.style.height = '75px'
-  
-  document.getElementsByClassName("canvas-container")[0].appendChild(img);
-}
-
-const verifyDrag = ({ indicatorX, indicatorY, thumbX, thumbY }) => {
-  if(Math.abs(indicatorX - thumbX) <= 50
-  && Math.abs(indicatorY - thumbY) <= 50 
-  && !state.dragIsActive) {
-    state.dragIsActive = true;
-  } 
-
-  if(Math.abs(indicatorX - thumbX) > 50
-  && Math.abs(indicatorY - thumbY) > 50 
-  && state.dragIsActive) {
-    state.dragIsActive = false;       
-    state.selectedButtonDrag.className = null  
-  }
-}
-
-const verifyTouched = (landmarkIndicator, landmarkThumb, button) => {
-  if (touched(landmarkIndicator, landmarkThumb, button)  
-  && state.dragIsActive  
-  && !state.selectedButtonDrag.className) {
-    state.selectedButtonDrag.className = button.className
-    state.selectedButtonDrag.name = button.className
-    return true
-  }
-  return false
-}
-
-const verifyTouchedAndDrag = (landmarkIndicator, landmarkThumb, button) => {
-  verifyTouched(landmarkIndicator, landmarkThumb, button)
-
-  if(state.dragIsActive 
-    && state.selectedButtonDrag.className === button.className) {
-    const element = document.getElementsByClassName(state.selectedButtonDrag.className)[0];
-    element.style.left = (landmarkIndicator.x) + 'px';
-    element.style.top = (landmarkIndicator.y) + 'px';
-
-    buttonsState[button.className].x = landmarkIndicator.x
-    buttonsState[button.className].y = landmarkIndicator.y
-  }
-}
-
-const getValidAnimal = (animals) => {
-  const index = getRandomInt(0, (animals.length -1))
-
-  if(!roundState.usedAnimals.find((animal) => animal === animals[index])) {
-    return animals[index]
-
-  }
-
-  return getValidAnimal(animals)
-}
-
-const setVisibileElement = (button, text) => {
-  const element = document.getElementsByClassName(button.className)[0];
-  
-  if(element.classList.contains('invisible')) {
-    element.classList.remove('invisible')
-  }
-
-  if(text) {
-    const elementText = document.getElementsByClassName(`${button.className}-text`)[0];
-    elementText.textContent = text
-  }
-}
-
-const setInvisibleElement = (button) => {
-  const element = document.getElementsByClassName(button.className)[0];
-  
-  if(!element.classList.contains('invisible')) {
-    element.classList.add('invisible')
-  }
-}
-
-const generateAnimal = (classificatedAnimals) => {
-  const animal = getValidAnimal(classificatedAnimals)
-  createButton(animal)
-  roundState.usedAnimals.push(animal)
-}
-
 let actualPhase = {
   squares: {}, 
   classifications: {}, 
   classificationsTranslate: {},
   quantityOfAnimalsPerSquare: 0
-}
-
-const generatePhase = ({
-  squares, 
-  classifications, 
-  classificationsTranslate,
-  quantityOfAnimalsPerSquare
-}) => {
-  const classificationsKeys = Object.keys(classificationsTranslate)
-  const squaresKeys = Object.keys(squares)
-
-  actualPhase = {
-    squares, 
-    classifications, 
-    classificationsTranslate,
-    quantityOfAnimalsPerSquare
-  }
-
-  for(let i = 0; i < squaresKeys.length; i++) {
-    setVisibileElement(squares[squaresKeys[i]], classificationsTranslate[classificationsKeys[i]])
-    for(let j = 0; j < quantityOfAnimalsPerSquare; j++) {
-      generateAnimal(classifications[classificationsKeys[i]])
-    }
-  }
 }
 
 const firstPhase = () => {
@@ -190,7 +43,10 @@ const firstPhase = () => {
     squares, 
     classificationsTranslate: classificationsTranslateSelected,  
     classifications: classificationsSelected, 
-    quantityOfAnimalsPerSquare: 1
+    quantityOfAnimalsPerSquare: 1,
+    actualPhase,
+    buttonsState,
+    roundState
   })
 } 
 
@@ -215,7 +71,10 @@ const secondPhase = () => {
     squares, 
     classificationsTranslate: classificationsTranslateSelected,  
     classifications: classificationsSelected, 
-    quantityOfAnimalsPerSquare: 3
+    quantityOfAnimalsPerSquare: 1,
+    actualPhase,
+    buttonsState,
+    roundState
   })
 } 
 
@@ -252,22 +111,13 @@ const thirdPhase = () => {
   }
 } 
 */
-firstPhase()
+secondPhase()
 
-const verifySquare = (square, index) => {
-  const buttonStateKeys = Object.keys(buttonsState)
 
-  if(isInsideSquare(square, buttonsState[buttonStateKeys[index]])) {
-    const animalsInSquare = roundState.roundSquares[`${square.name}Animals`]
 
-    if(animalsInSquare && !animalsInSquare.find(
-      (animal) => animal === buttonStateKeys[index])
-    ) {
-      roundState.roundSquares[`${square.name}Animals`].push(buttonStateKeys[index])
 
-    }
-  }
-}
+
+
 
 const verifyResults = () => {
   const { 
@@ -278,10 +128,10 @@ const verifyResults = () => {
   const buttonStateKeys = Object.keys(buttonsState)
 
   for(let i = 0; i < buttonStateKeys.length; i++) {
-    verifySquare(topLeft, i)
-    verifySquare(topRight, i)
-    verifySquare(bottomLeft, i)
-    verifySquare(bottomRight, i)
+    validateSquare(topLeft, i, buttonsState, roundState)
+    validateSquare(topRight, i, buttonsState, roundState)
+    validateSquare(bottomLeft, i, buttonsState, roundState)
+    validateSquare(bottomRight, i, buttonsState, roundState)
   }
 
   let wrongAnimals = []
@@ -290,59 +140,112 @@ const verifyResults = () => {
   for(let i = 0; i < buttonStateKeys.length; i++) {
     let wrongSquareCounter = 0;
 
-    const teste = !!roundState.roundSquares.topLeftAnimals.find(
-      (animal) => animal === buttonStateKeys[i]
+    const topLeftAnimals = roundState.roundSquares.topLeftAnimals
+    const topLeftSquare = actualPhase.squares.topLeft
+    const { 
+      rightCounter: topLeftRightCounter, 
+      wrongCounter: topLeftwrongCounter 
+    } = verifySquare(
+      topLeftSquare, 
+      topLeftAnimals, 
+      buttonStateKeys[i], 
+      rightSquareCounter, 
+      wrongSquareCounter
     )
-    console.log('actualPhase: ', actualPhase, 'roundState: ', roundState)
+    rightSquareCounter = topLeftRightCounter
+    wrongSquareCounter = topLeftwrongCounter
 
-    if(teste) {
-      const classificationsKeys = Object.keys(actualPhase.classificationsTranslate)
-      console.log(actualPhase.classifications)
-      console.log('classificationsKeys[0]',classificationsKeys[0])
-      const rightSquare = !!actualPhase.classifications[classificationsKeys[0]].find(
-        (animal) => animal === buttonStateKeys[i])
-      
-      if(rightSquare) {
-        rightSquareCounter++
-        console.log('rightSquareCounterLeft',rightSquareCounter)
-
-      }
-    } else {
-      wrongSquareCounter++
-    }
-
-    const teste1 = !!roundState.roundSquares.topRightAnimals.find(
-      (animal) => animal === buttonStateKeys[i]
+    const topRightAnimals = roundState.roundSquares.topRightAnimals
+    const topRightSquare = actualPhase.squares.topRight
+    const { 
+      rightCounter: topRightRightCounter, 
+      wrongCounter: topRightWrongCounter 
+    } = verifySquare(
+      topRightSquare, 
+      topRightAnimals, 
+      buttonStateKeys[i], 
+      rightSquareCounter, 
+      wrongSquareCounter
     )
+    rightSquareCounter = topRightRightCounter
+    wrongSquareCounter = topRightWrongCounter
 
-    if(teste1) {
-      const classificationsKeys = Object.keys(actualPhase.classificationsTranslate)
+    const bottomLeftAnimals = roundState.roundSquares.bottomLeftAnimals
+    const bottomLeftSquare = actualPhase.squares.bottomLeft
+    const { 
+      rightCounter: bottomLeftRightCounter, 
+      wrongCounter: bottomLeftWrongCounter 
+    } = verifySquare(
+      bottomLeftSquare, 
+      bottomLeftAnimals, 
+      buttonStateKeys[i], 
+      rightSquareCounter, 
+      wrongSquareCounter
+    )
+    rightSquareCounter = bottomLeftRightCounter
+    wrongSquareCounter = bottomLeftWrongCounter
 
-      const rightSquare = !!actualPhase.classifications[classificationsKeys[1]].find(
-        (animal) => animal === buttonStateKeys[i]
-      )
-      if(rightSquare) {
-        console.log('rightSquareCounter',rightSquareCounter)
-        rightSquareCounter++
-      }
-      
-    } else {
-      wrongSquareCounter++
-    }
-    if(wrongSquareCounter > 1) {
+    const bottomRightAnimals = roundState.roundSquares.bottomRightAnimals
+    const bottomRightSquare = actualPhase.squares.bottomRight
+    const { 
+      rightCounter: bottomRightRightCounter, 
+      wrongCounter: bottomRightWrongCounter 
+    } = verifySquare(
+      bottomRightSquare, 
+      bottomRightAnimals, 
+      buttonStateKeys[i], 
+      rightSquareCounter, 
+      wrongSquareCounter
+    )
+    rightSquareCounter = bottomRightRightCounter
+    wrongSquareCounter = bottomRightWrongCounter
+
+
+
+    // if(actualPhase.squares.bottomRight) { 
+    //   const bottomRightAnimals = roundState.roundSquares.bottomRightAnimals
+    //   const bottomRightclassification = actualPhase.squares.bottomRight.classification
+
+    //   const { 
+    //     rightCounter: bottomRightRightCounter, 
+    //     wrongCounter: bottomRightWrongCounter 
+    //   } = verifyRightSquare(
+    //     bottomRightAnimals, 
+    //     bottomRightclassification, 
+    //     buttonStateKeys[i], 
+    //     rightSquareCounter, 
+    //     wrongSquareCounter
+    //   )
+
+    //   rightSquareCounter = bottomRightRightCounter
+    //   wrongSquareCounter = bottomRightWrongCounter
+    // }
+
+    const squaresKeys = Object.keys(actualPhase.squares)
+    
+    if(squaresKeys.length === 2 && wrongSquareCounter > 1) {
       wrongAnimals.push(buttonStateKeys[i])
     }
-
-
+    if(squaresKeys.length === 3 && wrongSquareCounter > 2) {
+      wrongAnimals.push(buttonStateKeys[i])
+    }
+    if(squaresKeys.length === 4 && wrongSquareCounter > 3) {
+      wrongAnimals.push(buttonStateKeys[i])
+    }
   }
-  console.log(rightSquareCounter, buttonStateKeys.length)
+
+  console.log(rightSquareCounter, ' of ', buttonStateKeys.length, ' right')
 
   if(rightSquareCounter === buttonStateKeys.length) {
     console.log('==============huhuhkuh')
+    console.log(wrongAnimals)
+
+    // rightSquareCounter = 0
+    // wrongAnimals = []
+
   } else {
     console.log(wrongAnimals)
   }
-  //roundSquares.topLeft.find((animal) => animal === buttonStateKeys[i])
 
 }
 
@@ -351,7 +254,17 @@ function render(results) {
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
-  const { squares: { topLeft, topRight, bottomLeft, bottomRight } } = roundState;
+  const { 
+    squares: { 
+      topLeft, 
+      topRight, 
+      bottomLeft, 
+      bottomRight 
+    }, 
+    buttons: { 
+      submit
+    } 
+  } = roundState;
 
   if (results.multiHandLandmarks) {
     for (const landmarks of results.multiHandLandmarks) {
@@ -365,13 +278,13 @@ function render(results) {
       const landmarkThumb = { x: thumbX, y: thumbY };
 
      
-      verifyDrag({ indicatorX, indicatorY, thumbX, thumbY })
+      verifyDrag({ indicatorX, indicatorY, thumbX, thumbY, state })
 
       const buttonStateKeys = Object.keys(buttonsState)
 
       let allInsideSquares = true
       for(let i = 0; i < buttonStateKeys.length; i++) {
-        verifyTouchedAndDrag(landmark, landmarkThumb, buttonsState[buttonStateKeys[i]])
+        verifyTouchedAndDrag(landmark, landmarkThumb, buttonsState[buttonStateKeys[i]], state, buttonsState)
         
         if(!isInsideSquare(topLeft, buttonsState[buttonStateKeys[i]])
         && !isInsideSquare(topRight, buttonsState[buttonStateKeys[i]])
@@ -381,38 +294,20 @@ function render(results) {
         }
       }
 
-      const { buttons: { submit } } = roundState
       const submitElement = document.getElementsByClassName(submit.className)[0];
       if(allInsideSquares) {
         setVisibileElement(submitElement)
-        const isSubmitButtonTouched = verifyTouched(landmark, landmarkThumb, submit)
-        console.log('isSubmitButtonTouched', isSubmitButtonTouched)
+
+        const isSubmitButtonTouched = verifyTouched(landmark, landmarkThumb, submit, state)
+
         if(isSubmitButtonTouched) {
           verifyResults()
         }
       } 
+
       if(!allInsideSquares && !submitElement.classList.contains('invisible')) {
         setInvisibleElement(submitElement)
       }
-
-      // verifyTouchedAndDrag(landmark, landmarkThumb, teste1)
-
-      // console.log('here123123',teste)
-
-      
-
-      // if(isInsideSquare(topRight, teste)) {
-      //   console.log('hereasdasd',teste)
-      // }
-      // // console.log('here',teste)
-      // if(isInsideSquare(bottomLeft, teste)) {
-      //   console.log('here123123',teste)
-      // }
-
-      // if(isInsideSquare(bottomRight, teste)) {
-      //   console.log('here123123',teste)
-      // }
-
 
       drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS,
                      {color: '#00FF00', lineWidth: 5});

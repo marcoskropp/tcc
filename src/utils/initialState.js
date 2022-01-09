@@ -146,6 +146,7 @@ const getInitialRoundState = () => {
       topLeft: {
         className: 'top-left-square',
         name: 'topLeft',
+        classification: '',
         x: 0,
         y: 0,
         width: 300,
@@ -156,6 +157,7 @@ const getInitialRoundState = () => {
       topRight: {
         className: 'top-right-square',
         name: 'topRight',
+        classification: '',
         x: 900,
         y: 0,
         width: 300,
@@ -166,6 +168,7 @@ const getInitialRoundState = () => {
       bottomLeft: {
         className: 'bottom-left-square',
         name: 'bottomLeft',
+        classification: '',
         x: 0,
         y: 380,
         width: 300,
@@ -176,6 +179,7 @@ const getInitialRoundState = () => {
       bottomRight: {
         className: 'bottom-right-square',
         name: 'bottomRight',
+        classification: '',
         x: 980,
         y: 380,
         width: 300,
