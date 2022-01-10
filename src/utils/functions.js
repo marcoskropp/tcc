@@ -1,3 +1,6 @@
+import { createAnimalElement, setVisibileElement, setElementCoordinates } from './screenFunctions.js'
+
+
 const TOTAL_ROUNDS = 3;
 
 const COLORS = {
@@ -30,7 +33,7 @@ function generateSequence(quantityOfButtons, quantityOfSequence) {
   return sequence;
 }
 
-function touched(landmarkIndicator,landmarkThumb, button) {
+function touched(landmarkIndicator, landmarkThumb, button) {
   return landmarkIndicator.x > button.x &&
       landmarkThumb.x > button.x &&
     landmarkIndicator.x < button.x + button.width &&
@@ -113,17 +116,9 @@ const createButton = (imageName, buttonsState) => {
     height: 75,
     active: false,
     canTrigger: true,
-   }
+  }
 
-  const img = new Image();
-  img.src = `../assets/${imageName}.png`;
-  img.className = imageName
-  img.style.left = coordinate.x + 'px';
-  img.style.top = coordinate.y + 'px';
-  img.style.width = '125px'
-  img.style.height = '75px'
-  
-  document.getElementsByClassName("canvas-container")[0].appendChild(img);
+  createAnimalElement(imageName, coordinate)
 }
 
 const verifyTouched = (landmarkIndicator, landmarkThumb, button, state) => {
@@ -148,12 +143,15 @@ const verifyTouchedAndDrag = (
 
   if(state.dragIsActive 
     && state.selectedButtonDrag.className === button.className) {
-    const element = document.getElementsByClassName(state.selectedButtonDrag.className)[0];
-    element.style.left = (landmarkIndicator.x) + 'px';
-    element.style.top = (landmarkIndicator.y) + 'px';
+ 
+      const coordinate = {
+        x: (landmarkIndicator.x + landmarkThumb.x) / 2,
+        y: (landmarkIndicator.y + landmarkThumb.y) / 2
+      }
+    setElementCoordinates(state.selectedButtonDrag.className, coordinate)
 
-    buttonsState[button.className].x = landmarkIndicator.x
-    buttonsState[button.className].y = landmarkIndicator.y
+    buttonsState[button.className].x = coordinate.x
+    buttonsState[button.className].y = coordinate.y
   }
 }
 
@@ -201,29 +199,9 @@ const generatePhase = ({
       generateAnimal(classifications[classificationsKeys[i]], buttonsState, roundState)
     }
   }
-  console.log(actualPhase.squares)
 }
 
-const setVisibileElement = (button, text) => {
-  const element = document.getElementsByClassName(button.className)[0];
-  
-  if(element.classList.contains('invisible')) {
-    element.classList.remove('invisible')
-  }
 
-  if(text) {
-    const elementText = document.getElementsByClassName(`${button.className}-text`)[0];
-    elementText.textContent = text
-  }
-}
-
-const setInvisibleElement = (button) => {
-  const element = document.getElementsByClassName(button.className)[0];
-  
-  if(!element.classList.contains('invisible')) {
-    element.classList.add('invisible')
-  }
-}
 
 const validateSquare = (square, index, buttonsState, roundState) => {
   const buttonStateKeys = Object.keys(buttonsState)
@@ -313,8 +291,6 @@ export {
     getValidAnimal,
     generateAnimal,
     generatePhase,
-    setVisibileElement,
-    setInvisibleElement,
     validateSquare,
     verifyRightSquare,
     verifySquare,
