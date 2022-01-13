@@ -5,7 +5,7 @@ import {
   classificationsTranslate, isValidCoordinate, verifyDrag, createButton,
   verifyTouched, verifyTouchedAndDrag, getValidAnimal, generateAnimal, 
   generatePhase, setVisibileElement, setInvisibleElement, validateSquare,
-  verifyRightSquare, verifySquare
+  verifyRightSquare, verifySquare, firstPhase, secondPhase
 } from '../utils/index.js'
 
 const videoElement = document.getElementsByClassName('input_video')[0];
@@ -17,66 +17,17 @@ const roundState = getInitialRoundState()
 
 let buttonsState = {}
 
-let actualPhase = {
+const getInitialPhase = () => ({
   squares: {}, 
   classifications: {}, 
   classificationsTranslate: {},
   quantityOfAnimalsPerSquare: 0
-}
+})
 
-const firstPhase = () => {
-  const { squares: { topRight, topLeft } } = roundState;
+let actualPhase = getInitialPhase()
 
-  const squares = { topRight, topLeft }
 
-  const classificationsTranslateSelected = { 
-    vertebrates: classificationsTranslate.vertebrates, 
-    invertebrates: classificationsTranslate.invertebrates
-   }
 
-   const classificationsSelected = {
-    vertebrates: classifications.vertebrates, 
-    invertebrates: classifications.invertebrates
-   }
-
-  generatePhase({ 
-    squares, 
-    classificationsTranslate: classificationsTranslateSelected,  
-    classifications: classificationsSelected, 
-    quantityOfAnimalsPerSquare: 1,
-    actualPhase,
-    buttonsState,
-    roundState
-  })
-} 
-
-const secondPhase = () => {
-  const { squares: { topRight, topLeft, bottomLeft } } = roundState;
-
-  const squares = { topRight, topLeft, bottomLeft }
-
-  const classificationsTranslateSelected = { 
-    mammals: classificationsTranslate.mammals,
-    oviparous: classificationsTranslate.oviparous,
-    vertebrates: classificationsTranslate.vertebrates
-  }
-   
-  const classificationsSelected = {
-    mammals: classifications.mammals,
-    oviparous: classifications.oviparous,
-    vertebrates: classifications.vertebrates
-  }
-
-  generatePhase({ 
-    squares, 
-    classificationsTranslate: classificationsTranslateSelected,  
-    classifications: classificationsSelected, 
-    quantityOfAnimalsPerSquare: 1,
-    actualPhase,
-    buttonsState,
-    roundState
-  })
-} 
 
 /*
 const thirdPhase = () => {
@@ -111,13 +62,7 @@ const thirdPhase = () => {
   }
 } 
 */
-secondPhase()
-
-
-
-
-
-
+actualPhase = secondPhase(roundState, actualPhase, buttonsState)
 
 const verifyResults = () => {
   const { 
@@ -150,7 +95,8 @@ const verifyResults = () => {
       topLeftAnimals, 
       buttonStateKeys[i], 
       rightSquareCounter, 
-      wrongSquareCounter
+      wrongSquareCounter,
+      actualPhase
     )
     rightSquareCounter = topLeftRightCounter
     wrongSquareCounter = topLeftwrongCounter
@@ -165,7 +111,8 @@ const verifyResults = () => {
       topRightAnimals, 
       buttonStateKeys[i], 
       rightSquareCounter, 
-      wrongSquareCounter
+      wrongSquareCounter,
+      actualPhase
     )
     rightSquareCounter = topRightRightCounter
     wrongSquareCounter = topRightWrongCounter
@@ -180,7 +127,8 @@ const verifyResults = () => {
       bottomLeftAnimals, 
       buttonStateKeys[i], 
       rightSquareCounter, 
-      wrongSquareCounter
+      wrongSquareCounter,
+      actualPhase
     )
     rightSquareCounter = bottomLeftRightCounter
     wrongSquareCounter = bottomLeftWrongCounter
@@ -195,34 +143,15 @@ const verifyResults = () => {
       bottomRightAnimals, 
       buttonStateKeys[i], 
       rightSquareCounter, 
-      wrongSquareCounter
+      wrongSquareCounter,
+      actualPhase
     )
     rightSquareCounter = bottomRightRightCounter
     wrongSquareCounter = bottomRightWrongCounter
 
-
-
-    // if(actualPhase.squares.bottomRight) { 
-    //   const bottomRightAnimals = roundState.roundSquares.bottomRightAnimals
-    //   const bottomRightclassification = actualPhase.squares.bottomRight.classification
-
-    //   const { 
-    //     rightCounter: bottomRightRightCounter, 
-    //     wrongCounter: bottomRightWrongCounter 
-    //   } = verifyRightSquare(
-    //     bottomRightAnimals, 
-    //     bottomRightclassification, 
-    //     buttonStateKeys[i], 
-    //     rightSquareCounter, 
-    //     wrongSquareCounter
-    //   )
-
-    //   rightSquareCounter = bottomRightRightCounter
-    //   wrongSquareCounter = bottomRightWrongCounter
-    // }
-
     const squaresKeys = Object.keys(actualPhase.squares)
-    
+    console.log('wrongSquareCounter',wrongSquareCounter)
+
     if(squaresKeys.length === 2 && wrongSquareCounter > 1) {
       wrongAnimals.push(buttonStateKeys[i])
     }
@@ -235,15 +164,26 @@ const verifyResults = () => {
   }
 
   console.log(rightSquareCounter, ' of ', buttonStateKeys.length, ' right')
+  if(rightSquareCounter === buttonStateKeys.length && !roundState.round === TOTAL_ROUNDS) {
+    const passRoundButton = roundState.buttons.passRound
+    setVisibileElement(passRoundButton)
+    setTimeout(() => {
+      setInvisibleElement(passRoundButton)
+      roundState.round++;
+      rightSquareCounter = 0
+      wrongAnimals = []
+    }, 1500)
 
-  if(rightSquareCounter === buttonStateKeys.length) {
-    console.log('==============huhuhkuh')
+
+  } else if(rightSquareCounter === buttonStateKeys.length && roundState.round === TOTAL_ROUNDS) {
+    const passRoundButton = roundState.buttons.passRound
+    setVisibileElement(passRoundButton)
+    actualPhase = getInitialPhase()
     console.log(wrongAnimals)
-
-    // rightSquareCounter = 0
-    // wrongAnimals = []
-
   } else {
+    const lostGameButton = roundState.buttons.lostGame
+    setVisibileElement(lostGameButton)
+    actualPhase = getInitialPhase()
     console.log(wrongAnimals)
   }
 

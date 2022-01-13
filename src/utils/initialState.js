@@ -1,4 +1,5 @@
 import { generateSequence } from './functions.js'
+import { firstPhase, secondPhase } from './phases.js';
 
 let actualSequenceLenght = 4;
 
@@ -53,16 +54,44 @@ const getInitialRoundState = () => {
     usedAnimals: [],
     userTime: false,
     round: 1,
+    roundSequence: [firstPhase, secondPhase],
     buttons: {
       submit: {
         className: 'submit',
-        x: 565,
+        x: 555,
         y: 600,
-        width: 150,
-        height: 40,
+        width: 170,
+        height: 60,
         active: false,
         canTrigger: true,
       },
+      winGame: {
+        className: 'win-game',
+        x: 465,
+        y: 150,
+        width: 350,
+        height: 100,
+        active: false,
+        canTrigger: true,
+      },
+      lostGame: {
+        className: 'lost-game',
+        x: 465,
+        y: 150,
+        width: 350,
+        height: 100,
+        active: false,
+        canTrigger: true,
+      },
+      passRound: {
+        className: 'pass-round-game',
+        x: 525,
+        y: 150,
+        width: 230,
+        height: 50,
+        active: false,
+        canTrigger: true,
+      }
     },
     roundSquares: {
       topLeftAnimals: [],

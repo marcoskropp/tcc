@@ -34,8 +34,8 @@ const createAnimalElement = (imageName, coordinate) => {
 
 const setElementCoordinates = (className, coordinate) => {
     const element = document.getElementsByClassName(className)[0];
-    element.style.left = (coordinate.x) + 'px';
-    element.style.top = (coordinate.y) + 'px';
+    element.style.left = (coordinate.x - 20) + 'px';
+    element.style.top = (coordinate.y - 20) + 'px';
 }
 
 export {

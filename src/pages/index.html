@@ -15,28 +15,53 @@
   <div class="container">
 
     <video class="input_video"></video>
+
     <div class="canvas-container">
+      <img class="background-container" src="../assets/teste1.jpeg" />
+
       <!-- <img class="dog invisible" src="../assets/dog.png" /> -->
-      <!-- <img class="cat" src="../assets/cat.png" /> -->
 
       <div class="square top-left-square">
+        <img class="square-image" src="../assets/ground.png" />
         <p class="square-text top-left-square-text"></p>
       </div>
       <div class="square top-right-square">
+        <img class="square-image" src="../assets/ground.png" />
         <p class="square-text top-right-square-text"></p>
       </div>
       <div class="square bottom-left-square invisible">
+        <img class="square-image" src="../assets/ground.png" />
         <p class="square-text bottom-left-square-text"></p>
       </div>
       <div class="square bottom-right-square invisible">
+        <img class="square-image" src="../assets/ground.png" />
         <p class="square-text bottom-right-square-text"></p>
       </div>
-      <div class="submit invisible"><p class="submit-text">Finalizar</p></div>
+      <div class="submit invisible"><p class="submit-text">Continuar</p></div>
+
+      <div class="win-game invisible">
+        <h2>VOCÊ VENCEU!</h2>
+        <p class="try-again-description">Deseja tentar novamente?</p>
+        <p>Toque aqui!</p>
+      </div>
+      <div class="pass-round-game ">
+        <div class="stars">
+          <img class="star star-bottom" src="../assets/star.png" />
+          <img class="star" src="../assets/star.png" />
+          <img class="star star-bottom" src="../assets/star.png" />
+        </div>
+        <p class="pass-round-description">PASSOU!</p>
+
+      </div>
+      <div class="lost-game invisible">
+        <h2 class="lost-game-title">VOCÊ PERDEU!</h2>
+        <p class="try-again-description">Deseja tentar novamente?</p>
+        <p>Toque aqui!</p>
+      </div>
 
       <canvas class="output_canvas" width="1280px" height="720px">
     </div>  
-
-
+   
     <div class="hands-view invisible">  
       
       <div class="enable-hands invisible">

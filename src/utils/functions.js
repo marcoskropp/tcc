@@ -1,7 +1,7 @@
 import { createAnimalElement, setVisibileElement, setElementCoordinates } from './screenFunctions.js'
 
 
-const TOTAL_ROUNDS = 3;
+const TOTAL_ROUNDS = 2;
 
 const COLORS = {
     BLUE_PRIMARY : "#4287f5",
@@ -199,9 +199,9 @@ const generatePhase = ({
       generateAnimal(classifications[classificationsKeys[i]], buttonsState, roundState)
     }
   }
+
+  return actualPhase
 }
-
-
 
 const validateSquare = (square, index, buttonsState, roundState) => {
   const buttonStateKeys = Object.keys(buttonsState)
@@ -251,12 +251,15 @@ const verifySquare = (
   animals, 
   buttonStateKey, 
   rightCounter, 
-  wrongCounter
+  wrongCounter,
+  actualPhase
 ) => {
+  let actualRightCounter = rightCounter
+  let actualWrongCounter = wrongCounter
   if(square) {  
     const { 
-      rightCounter: topLeftRightCounter, 
-      wrongCounter: topLeftwrongCounter 
+      rightCounter: newRightCounter, 
+      wrongCounter: newWrongCounter 
     } = verifyRightSquare(
       animals, 
       square.classification, 
@@ -265,12 +268,13 @@ const verifySquare = (
       wrongCounter,
       actualPhase
     )
+    // console.log('actualRightCounter', actualRightCounter, newRightCounter)
 
-    rightCounter = topLeftRightCounter
-    wrongCounter = topLeftwrongCounter
+    actualRightCounter = newRightCounter
+    actualWrongCounter = newWrongCounter
   }
 
-  return { rightCounter, wrongCounter }
+  return { rightCounter: actualRightCounter, wrongCounter: actualWrongCounter }
 }
 
 
