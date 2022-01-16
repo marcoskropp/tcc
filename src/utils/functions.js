@@ -1,7 +1,7 @@
 import { createAnimalElement, setVisibileElement, setElementCoordinates } from './screenFunctions.js'
 
 
-const TOTAL_ROUNDS = 2;
+const TOTAL_ROUNDS = 3;
 
 const COLORS = {
     BLUE_PRIMARY : "#4287f5",
@@ -162,7 +162,7 @@ const getValidAnimal = (animals, roundState) => {
     return animals[index]
   }
 
-  return getValidAnimal(animals)
+  return getValidAnimal(animals, roundState)
 }
 
 const generateAnimal = (classificatedAnimals, buttonsState, roundState) => {

@@ -17,14 +17,14 @@ const roundState = getInitialRoundState()
 
 let buttonsState = {}
 
-const getInitialPhase = () => ({
+const resetPhase = () => ({
   squares: {}, 
   classifications: {}, 
   classificationsTranslate: {},
   quantityOfAnimalsPerSquare: 0
 })
 
-let actualPhase = getInitialPhase()
+let actualPhase = resetPhase()
 
 
 
@@ -61,8 +61,10 @@ const thirdPhase = () => {
     roundState.usedAnimals.push(validVertebrate)
   }
 } 
-*/
-actualPhase = secondPhase(roundState, actualPhase, buttonsState)
+*/console.log(roundState)
+actualPhase = roundState.roundSequence[0](roundState, actualPhase, buttonsState) 
+roundState.roundSequence.shift()
+// actualPhase = firstPhase(roundState, actualPhase, buttonsState)
 
 const verifyResults = () => {
   const { 
@@ -171,19 +173,27 @@ const verifyResults = () => {
       setInvisibleElement(passRoundButton)
       roundState.round++;
       rightSquareCounter = 0
+      actualPhase = resetPhase()
+      console.log(wrongAnimals)
+      console.log(roundState)
+      actualPhase = roundState.roundSequence[0](roundState, actualPhase, buttonsState) 
+      roundState.roundSequence.shift()
       wrongAnimals = []
     }, 1500)
 
 
   } else if(rightSquareCounter === buttonStateKeys.length && roundState.round === TOTAL_ROUNDS) {
-    const passRoundButton = roundState.buttons.passRound
-    setVisibileElement(passRoundButton)
-    actualPhase = getInitialPhase()
-    console.log(wrongAnimals)
+    const winGameButton = roundState.buttons.winGame
+    setVisibileElement(winGameButton)
+    // actualPhase = resetPhase()
+    // console.log(wrongAnimals)
+    // console.log(roundState)
+    // actualPhase = roundState.roundSequence[0](roundState, actualPhase, buttonsState) 
+    // roundState.roundSequence.shift()
   } else {
     const lostGameButton = roundState.buttons.lostGame
     setVisibileElement(lostGameButton)
-    actualPhase = getInitialPhase()
+    actualPhase = resetPhase()
     console.log(wrongAnimals)
   }
 

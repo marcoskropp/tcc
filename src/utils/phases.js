@@ -53,7 +53,7 @@ const secondPhase = (roundState, actualPhase, buttonsState) => {
         squares, 
         classificationsTranslate: classificationsTranslateSelected,  
         classifications: classificationsSelected, 
-        quantityOfAnimalsPerSquare: 1,
+        quantityOfAnimalsPerSquare: 3,
         actualPhase,
         buttonsState,
         roundState

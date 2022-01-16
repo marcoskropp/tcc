@@ -1,8 +1,8 @@
 const images = {
     cat: 'cat', 
     dog: 'dog', 
-    cobra:'cobra', 
-    cow: 'cow', 
+    snake:'snake', 
+    cow: 'cow2', 
     wolf: 'wolf', 
     tiger: 'tiger', 
     shark: 'shark', 
@@ -15,20 +15,18 @@ const images = {
     whale: 'whale',
     canary: 'canary',
     monkey: 'monkey',
-    parrot: 'parrot',
+    peacock: 'peacock',
     penguin: 'penguin',
-    macaw: 'macaw',
-    whiteParrot: 'white-parrot',
+    eagle: 'eagle',
+    duck: 'duck',
     alligator: 'alligator',
     spider: 'spider',
-    butterfly: 'butterfly',
-    ladybird: 'ladybird',
+    ladybug: 'ladybug',
     bee: 'bee',
     cricket: 'cricket',
     ant: 'ant',
     scorpion: 'scorpion', 
     beetle: 'beetle',
-    worm: 'worm', 
   }
   
   const mammals = [
@@ -37,23 +35,23 @@ const images = {
   ]
   
   const oviparous = [
-    images.frog, images.cobra, images.shark, images.turtle, images.owl,
-    images.chicken, images.canary, images.butterfly, images.parrot, 
-    images.penguin, images.macaw, images.whiteParrot, images.alligator,
-    images.ladybird, images.bee, images.cricket, images.ant, images.scorpion,
+    images.frog, images.snake, images.shark, images.turtle, images.owl,
+    images.chicken, images.canary, images.peacock, 
+    images.penguin, images.eagle, images.duck, images.alligator,
+    images.ladybug, images.bee, images.cricket, images.ant, images.scorpion,
     images.beetle, 
   ]
   
   const vertebrates = [
     images.cat, images.dog, images.cow, images.wolf, images.tiger, images.horse, 
-    images.monkey, images.frog, images.cobra, images.shark, images.turtle, 
-    images.owl, images.chicken, images.whale, images.canary, images.parrot, 
-    images.penguin, images.macaw, images.whiteParrot, images.alligator, 
+    images.monkey, images.frog, images.snake, images.shark, images.turtle, 
+    images.owl, images.chicken, images.whale, images.canary, images.peacock, 
+    images.penguin, images.eagle, images.duck, images.alligator, 
   ]
   
   const invertebrates = [
-    images.butterfly, images.spider, images.ladybird, images.bee, images.cricket,
-    images.ant, images.scorpion, images.beetle, images.worm, 
+    images.spider, images.ladybug, images.bee, images.cricket,
+    images.ant, images.scorpion, images.beetle, 
   ]
   
   const classifications = {
