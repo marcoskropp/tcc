@@ -6,7 +6,7 @@ import {
 
 const firstPhase = (roundState, actualPhase, buttonsState) => {
     const { squares: { topRight, topLeft } } = roundState;
-
+    console.log('here')
     const squares = { topRight, topLeft }
 
     const classificationsTranslateSelected = { 
@@ -19,7 +19,7 @@ const firstPhase = (roundState, actualPhase, buttonsState) => {
         invertebrates: classifications.invertebrates
     }
 
-    generatePhase({ 
+    actualPhase = generatePhase({ 
         squares, 
         classificationsTranslate: classificationsTranslateSelected,  
         classifications: classificationsSelected, 
@@ -53,7 +53,7 @@ const secondPhase = (roundState, actualPhase, buttonsState) => {
         squares, 
         classificationsTranslate: classificationsTranslateSelected,  
         classifications: classificationsSelected, 
-        quantityOfAnimalsPerSquare: 3,
+        quantityOfAnimalsPerSquare: 1,
         actualPhase,
         buttonsState,
         roundState
@@ -62,4 +62,34 @@ const secondPhase = (roundState, actualPhase, buttonsState) => {
     return actualPhase
 } 
 
-export { firstPhase, secondPhase }
+const thirdPhase = (roundState, actualPhase, buttonsState) => {
+    const { squares } = roundState;
+
+    const classificationsTranslateSelected = { 
+        feathers: classificationsTranslate.feathers,
+        bristle: classificationsTranslate.bristle,
+        scales: classificationsTranslate.scales,
+        antennas: classificationsTranslate.antennas
+    }
+        
+    const classificationsSelected = {
+        feathers: classifications.feathers,
+        bristle: classifications.bristle,
+        scales: classifications.scales,
+        antennas: classifications.antennas
+    }
+
+    actualPhase = generatePhase({ 
+        squares, 
+        classificationsTranslate: classificationsTranslateSelected,  
+        classifications: classificationsSelected, 
+        quantityOfAnimalsPerSquare: 1,
+        actualPhase,
+        buttonsState,
+        roundState
+    })
+
+    return actualPhase
+} 
+
+export { firstPhase, secondPhase, thirdPhase }
