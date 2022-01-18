@@ -1,18 +1,18 @@
-const setVisibileElement = (button, text) => {
-    const element = document.getElementsByClassName(button.className)[0];
+const setVisibileElement = (className, text) => {
+    const element = document.getElementsByClassName(className)[0];
 
     if(element.classList.contains('invisible')) {
         element.classList.remove('invisible')
     }
 
     if(text) {
-        const elementText = document.getElementsByClassName(`${button.className}-text`)[0];
+        const elementText = document.getElementsByClassName(`${className}-text`)[0];
         elementText.textContent = text
     }
 }
   
-const setInvisibleElement = (button) => {
-    const element = document.getElementsByClassName(button.className)[0];
+const setInvisibleElement = (className) => {
+    const element = document.getElementsByClassName(className)[0];
 
     if(!element.classList.contains('invisible')) {
         element.classList.add('invisible')

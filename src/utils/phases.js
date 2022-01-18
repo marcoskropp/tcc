@@ -6,7 +6,7 @@ import {
 
 const firstPhase = (roundState, actualPhase, buttonsState) => {
     const { squares: { topRight, topLeft } } = roundState;
-    console.log('here')
+
     const squares = { topRight, topLeft }
 
     const classificationsTranslateSelected = { 

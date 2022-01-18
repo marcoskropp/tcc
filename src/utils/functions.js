@@ -1,7 +1,7 @@
 import { createAnimalElement, setVisibileElement, setElementCoordinates } from './screenFunctions.js'
 
 
-const TOTAL_ROUNDS = 3;
+const TOTAL_ROUNDS = 2;
 
 const COLORS = {
     BLUE_PRIMARY : "#4287f5",
@@ -192,7 +192,7 @@ const generatePhase = ({
   }
 
   for(let i = 0; i < squaresKeys.length; i++) {
-    setVisibileElement(squares[squaresKeys[i]], classificationsTranslate[classificationsKeys[i]])
+    setVisibileElement(squares[squaresKeys[i]].className, classificationsTranslate[classificationsKeys[i]])
     actualPhase.squares[squaresKeys[i]].classification = classificationsKeys[i]
 
     for(let j = 0; j < quantityOfAnimalsPerSquare; j++) {

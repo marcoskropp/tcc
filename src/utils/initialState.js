@@ -72,7 +72,7 @@ const getInitialRoundState = () => {
         width: 350,
         height: 100,
         active: false,
-        canTrigger: true,
+        canTrigger: false,
       },
       lostGame: {
         className: 'lost-game',
@@ -90,7 +90,16 @@ const getInitialRoundState = () => {
         width: 230,
         height: 50,
         active: false,
-        canTrigger: true,
+        canTrigger: false,
+      },
+      initGame: {
+        className: 'init-button',
+        x: 450,
+        y: 288,
+        width: 400,
+        height: 100,
+        active: false,
+        canTrigger: false,
       }
     },
     roundSquares: {

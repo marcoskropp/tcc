@@ -85,12 +85,11 @@ img {
   width: 1280px;
   height: 720px;
   z-index: 90;
-  opacity: 25%;
-
 }
 
 .container {
-  }
+
+}
 
 .enable-hands {
   width: 130px;
@@ -292,7 +291,8 @@ img {
   border-radius: 1em;
   padding: 10px 20px;
   margin-top: 650px;
-  margin-right: 875px;
+  margin-left: 10px;
+  z-index: 100;
 }
 
 
@@ -301,14 +301,21 @@ img {
   background-color: rgb(245, 245, 245);
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   border-radius: 1em;
-  padding: 50px;
+  padding: 25px;
   opacity: 0.9;
+  z-index: 100;
+  margin-left: 440px;
+  margin-top: 192px;
+  width: 400px;
+  height: 175px;
 }
 
 .init-button {
   background-color: rgb(245, 245, 245);
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   border-radius: 1em;
+  padding: 15px 0;
+  margin-top: 35px;
 }
 
 .init-text {
@@ -318,11 +325,9 @@ img {
 .help-view {
   width: 130px;
   position: absolute;
-  right: 0;
-  bottom: 0;
   z-index: 99;
-  margin-right: 350px;
-  margin-bottom: 250px;
+  margin-left: 1100px;
+  margin-top: 560px;
   background-color: rgb(245, 245, 245);
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   border-radius: 1em;
@@ -346,16 +351,13 @@ img {
   background-color: rgb(245, 245, 245);
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   border-radius: 1em;  
-  width: 350px;
-  height: 700px;
+  width: 300px;
+  height: auto;
+  padding: 15px;
   position: absolute;
-  right: 0;
-  bottom: 0;
   z-index: 99;
-  margin-right: 320px;
-  margin-bottom: 180px;
-  opacity: 0.9;
-
+  margin-left: 940px;
+  margin-top: 50px;
 }
 
 .how-to-play {
@@ -365,8 +367,18 @@ img {
   margin: 0 14px;
 }
 
+.how-to-play h2 {
+  margin-bottom: 20px;
+}
+
 .how-to-play-title {
   padding-top: 150;
+}
+
+.how-to-play-icon {
+  width: 50px;
+  height: auto;
+  position: inherit;
 }
 
 .input_video {
@@ -457,7 +469,7 @@ img {
   align-items: center;
   justify-content: center;
   position: absolute;
-  z-index: 100;
+  z-index: 101;
   margin-left: 565px;
   margin-top: 600px;
   background-color: rgb(245, 245, 245);
@@ -478,5 +490,28 @@ img {
   height: auto;
 }
 
+.loader {
+  position: absolute;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid rgb(130, 10, 209);
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  z-index: 100;
+  margin-left: 580px;
+  margin-top: 300px;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 

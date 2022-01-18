@@ -11,6 +11,7 @@
 </head>
 <link rel="stylesheet" href="index.css">
 <body>
+      <img class="background-container" src="../assets/teste1.jpeg" />
 
   <div class="container">
 
@@ -18,13 +19,12 @@
 
     <div class="canvas-container">
 
-      <!-- <img class="dog invisible" src="../assets/dog.png" /> -->
 
-      <div class="square top-left-square">
+      <div class="square top-left-square invisible">
         <img class="square-image" src="../assets/ground.png" />
         <p class="square-text top-left-square-text"></p>
       </div>
-      <div class="square top-right-square">
+      <div class="square top-right-square invisible">
         <img class="square-image" src="../assets/ground.png" />
         <p class="square-text top-right-square-text"></p>
       </div>
@@ -36,13 +36,15 @@
         <img class="square-image" src="../assets/ground.png" />
         <p class="square-text bottom-right-square-text"></p>
       </div>
-      <div class="submit invisible"><p class="submit-text">Continuar</p></div>
+
+      <div class="submit invisible"><p class="submit-text">Classificar</p></div>
 
       <div class="win-game invisible">
         <h2>VOCÊ VENCEU!</h2>
         <p class="try-again-description">Deseja tentar novamente?</p>
         <p>Toque aqui!</p>
       </div>
+
       <div class="pass-round-game invisible">
         <div class="stars">
           <img class="star star-bottom" src="../assets/star.png" />
@@ -58,6 +60,33 @@
         <p>Toque aqui!</p>
       </div>
 
+      <div class="help-explanation invisible">
+        <div class="how-to-play">
+          <h2>Como jogar?</h2>
+          <p>
+            Classifique os animais de acordo com sua classficação. Os animais podem possuir mais de uma classificação 
+            correta.
+            Utilize o dedo indicador e o polegar para realizar o movimento de pinça, controlar o animal e pressionar botões.
+          </p>
+          <img class="how-to-play-icon" src="../assets/ok.png" /> 
+        </div>
+      </div>
+
+      <div class="dashboard invisible">
+        <h2>Bem Vindo!</h2>
+        <h1>Classificação de animais</h1>
+        <div class="init-button" id="init-button">
+          <p class="init-text">INICIAR</p>
+        </div>
+      </div>
+
+      <div class="developed-by invisible">
+        <h3>Desenvolvido por</h3>
+        <h4>Marcos Kropp</h4>
+      </div>
+
+      <div class="loader"></div>
+
       <canvas class="output_canvas" width="1280px" height="720px">
     </div>  
    
@@ -70,24 +99,9 @@
         <p>Toque aqui!</p>
       </div>
 
-      <div class="help-view invisible">
-        <div class="help-container">
-          <i class="far fa-question-circle question-icon"></i>
-        </div>
-        <p>Toque aqui!</p>
-      </div>
+    
 
-      <div class="help-explanation invisible">
-        <div class="how-to-play">
-          <h2>Como jogar?</h2>
-            <p>O jogo tem como objetivo testar a memória do usuário, nele o jogador é apresentado
-              a uma sequência que combina cores e som (cada cor é associada a um som) e precisa
-              replicá-la um certo tempo depois de sua execução. Contendo 3 sequências, e utilizando o dedo indicador, se durante o jogado
-              o usuário errar qualquer dos elementos ele perderá a partida. Se finalizar as 3 sequências sem 
-              errar nenhum elemento ele será declarado vencedor. 
-            </p>
-        </div>
-      </div>
+    
       
     </div>
 
@@ -114,34 +128,10 @@
       </div>
     </div>
 
-    <!-- <div class="win-game invisible">
-      <h2>VOCÊ VENCEU!</h2>
-      <p class="try-again-description">Deseja tentar novamente?</p>
-        <p>Toque aqui!</p>
-    </div>
-    <div class="pass-round-game invisible">
-      <h2>PASSOU!</h2>
-    </div>
-    <div class="lost-game invisible">
-      <h2 class="lost-game-title">VOCÊ PERDEU!</h2>
-        <p class="try-again-description">Deseja tentar novamente?</p>
-        <p>Toque aqui!</p>
-      </div> -->
 
+   
 
-
-    <div class="dashboard invisible">
-      <h2>Bem Vindo!</h2>
-      <h1>Genious Game</h1>
-      <div class="init-button" id="init-button">
-        <p class="init-text">INICIAR</p>
-      </div>
-    </div>
-
-    <div class="developed-by invisible">
-      <h4>Desenvolvido por</h4>
-      <h3>Marcos Kropp</h3>
-    </div>
+  
 </div>
   
   <script src="index.js" type="module"></script>

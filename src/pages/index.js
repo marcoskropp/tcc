@@ -12,11 +12,6 @@ const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
 
-const state = getInitialState();
-const roundState = getInitialRoundState()
-
-let buttonsState = {}
-
 const resetPhase = () => ({
   squares: {}, 
   classifications: {}, 
@@ -24,58 +19,28 @@ const resetPhase = () => ({
   quantityOfAnimalsPerSquare: 0
 })
 
-
-
-
-
-
-/*
-const thirdPhase = () => {
-  const mammals = classifications.mammals
-  const oviparous = classifications.oviparous
-  const vertebrates = classifications.vertebrates
-  // adicionar mais classificações
-
-  for(let i = 0; i < 4; i++) {
-    
-    const validMammal = getValidAnimal(mammals)
-    const validOviparou = getValidAnimal(oviparous)
-    const validVertebrate = getValidAnimal(vertebrates)
-
-    const { squares: { bottomLeft, bottomRight } } = roundState;
-
-    bottomLeft.canTrigger = true
-    bottomRight.canTrigger = true
-
-    const bottomLeftElement = document.getElementsByClassName(bottomLeft.className)[0];
-    bottomLeftElement.classList.remove('invisible')
-    const bottomRightElement = document.getElementsByClassName(bottomRight.className)[0];
-    bottomRightElement.classList.remove('invisible')
-
-    createButton(validMammal)
-    createButton(validOviparou)
-    createButton(validVertebrate)
-
-    roundState.usedAnimals.push(validMammal)
-    roundState.usedAnimals.push(validOviparou)
-    roundState.usedAnimals.push(validVertebrate)
-  }
-} 
-*/
-// console.log(roundState)
-
-let actualPhase = roundState.roundSequence[0](roundState, {}, buttonsState) 
-roundState.roundSequence.shift()
-console.log('actualPhase', actualPhase )
-// actualPhase = firstPhase(roundState, actualPhase, buttonsState)
-
+let state = getInitialState();
+let roundState = getInitialRoundState()
+roundState.buttons.initGame.canTrigger = true;
+let buttonsState = {}
+let actualPhase = resetPhase()
 
 const verifyResults = () => {
   const { 
     squares: { 
       topLeft, topRight, bottomLeft, bottomRight 
     }, 
+    buttons: {
+      submit
+    }
   } = roundState;
+
+  const submitElement = document.getElementsByClassName(submit.className)[0];
+
+  if(!submitElement.classList.contains('invisible')) {
+    setInvisibleElement(submitElement.className)
+  }
+
   const buttonStateKeys = Object.keys(buttonsState)
 
   for(let i = 0; i < buttonStateKeys.length; i++) {
@@ -156,7 +121,6 @@ const verifyResults = () => {
     wrongSquareCounter = bottomRightWrongCounter
 
     const squaresKeys = Object.keys(actualPhase.squares)
-    console.log('wrongSquareCounter',wrongSquareCounter)
 
     if(squaresKeys.length === 2 && wrongSquareCounter > 1) {
       wrongAnimals.push(buttonStateKeys[i])
@@ -167,6 +131,7 @@ const verifyResults = () => {
     if(squaresKeys.length === 4 && wrongSquareCounter > 3) {
       wrongAnimals.push(buttonStateKeys[i])
     }
+
   }
 
   console.log('roundState', roundState)
@@ -177,11 +142,15 @@ const verifyResults = () => {
   console.log(rightSquareCounter, ' of ', buttonStateKeys.length, ' right', rightSquareCounter === buttonStateKeys.length)
   console.log('roundState.round', roundState.round, TOTAL_ROUNDS, roundState.round !== TOTAL_ROUNDS)
 
-  if(rightSquareCounter === buttonStateKeys.length && roundState.round !== TOTAL_ROUNDS) {
+  const passRound = rightSquareCounter === buttonStateKeys.length && roundState.round !== TOTAL_ROUNDS 
+  const winGame = rightSquareCounter === buttonStateKeys.length && roundState.round === TOTAL_ROUNDS
+  if(passRound) {
     const passRoundButton = roundState.buttons.passRound
-    setVisibileElement(passRoundButton)
+    setVisibileElement(passRoundButton.className)
     setTimeout(() => {
-      setInvisibleElement(passRoundButton)
+      setInvisibleElement(passRoundButton.className)
+      setInvisibleElement(submit.className)
+
       roundState.round++
       rightSquareCounter = 0
       // actualPhase = resetPhase()
@@ -190,12 +159,13 @@ const verifyResults = () => {
       buttonsState = {}
       actualPhase = roundState.roundSequence[0](roundState, actualPhase, buttonsState) 
       roundState.roundSequence.shift()
+      submit.canTrigger = true
+
     }, 1500)
-
-
-  } else if(rightSquareCounter === buttonStateKeys.length && roundState.round === TOTAL_ROUNDS) {
+  } else if(winGame) {
     const winGameButton = roundState.buttons.winGame
-    setVisibileElement(winGameButton)
+    setVisibileElement(winGameButton.className)
+    winGameButton.canTrigger = true;
     // actualPhase = resetPhase()
     // console.log(wrongAnimals)
     // console.log(roundState)
@@ -204,7 +174,7 @@ const verifyResults = () => {
     
   } else {
     const lostGameButton = roundState.buttons.lostGame
-    setVisibileElement(lostGameButton)
+    setVisibileElement(lostGameButton.className)
     // actualPhase = resetPhase()
     
 
@@ -220,15 +190,29 @@ const verifyResults = () => {
 const removeOldElements = (buttonsState) => {
   const buttonsStateKeys = Object.keys(buttonsState)
   for(let i = 0; i < buttonsStateKeys.length; i++) {
-    setInvisibleElement(buttonsState[buttonsStateKeys[i]])
+    setInvisibleElement(buttonsState[buttonsStateKeys[i]].className)
 
   }
 }
 
+let handsLoaded = false;
 function render(results) {
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+  if(!handsLoaded) {
+    setInvisibleElement('loader')
+
+    setVisibileElement('help-explanation')
+    setVisibileElement('dashboard')
+    setVisibileElement('developed-by')
+
+    const element = document.getElementsByClassName('background-container')[0];
+    element.style.opacity = '50%';
+
+    handsLoaded = true;
+  }
 
   const { 
     squares: { 
@@ -238,7 +222,8 @@ function render(results) {
       bottomRight 
     }, 
     buttons: { 
-      submit
+      submit,
+      initGame,
     } 
   } = roundState;
 
@@ -270,20 +255,88 @@ function render(results) {
         }
       }
 
-      const submitElement = document.getElementsByClassName(submit.className)[0];
-      if(allInsideSquares) {
-        setVisibileElement(submitElement)
+      const isInitGameButtonTouched = touched(landmark, landmarkThumb, initGame, state)
+      if(isInitGameButtonTouched && initGame.canTrigger) {
+        console.log('initGame',initGame)
 
-        const isSubmitButtonTouched = verifyTouched(landmark, landmarkThumb, submit, state)
+        console.log('aquiaqui')
+
+        setInvisibleElement('help-explanation')
+        setInvisibleElement('dashboard')
+        setInvisibleElement('developed-by')
+
+        const element = document.getElementsByClassName('background-container')[0];
+        element.style.opacity = '15%';
+        
+
+        roundState.buttons.initGame.canTrigger = false;
+        console.log('roundState',roundState)
+
+        actualPhase = roundState.roundSequence[0](roundState, {}, buttonsState) 
+        roundState.roundSequence.shift()
+      }
+      
+
+      const submitElement = document.getElementsByClassName(submit.className)[0];
+      if(allInsideSquares && buttonStateKeys.length > 0 && submit.canTrigger) {
+        setVisibileElement(submitElement.className)
+        console.log('submitButtonTouched')
+        const isSubmitButtonTouched = touched(landmark, landmarkThumb, submit, state)
 
         if(isSubmitButtonTouched) {
           verifyResults()
+          submit.canTrigger = false
+          if(!submitElement.classList.contains('invisible')) {
+            setInvisibleElement(submitElement.className)
+          }
         }
       } 
 
-      if(!allInsideSquares && !submitElement.classList.contains('invisible')) {
-        setInvisibleElement(submitElement)
+      const winGameButton = roundState.buttons.winGame
+      const isWinGameButtonTouched = touched(landmark, landmarkThumb, winGameButton, state)
+
+      if(isWinGameButtonTouched && winGameButton.canTrigger) {
+        console.log('winGameButtonTouched')
+        // roundState = getInitialRoundState()
+        // actualPhase = resetPhase()
+
+        const winGameButton = roundState.buttons.winGame
+        setInvisibleElement(winGameButton.className)
+        roundState.buttons.winGame.canTrigger = false;
+        removeOldElements(buttonsState)
+        buttonsState = {}
+        const actualSquares = Object.keys(actualPhase.squares)
+        for(let i = 0; i < actualSquares.length; i++) {
+          setInvisibleElement(actualPhase.squares[actualSquares[i]].className)
+
+        }
+
+
+        roundState = getInitialRoundState()
+        roundState.usedAnimals = []
+
+
+        actualPhase = roundState.roundSequence[0](roundState, actualPhase, buttonsState) 
+        roundState.roundSequence.shift()
+        submit.canTrigger = true
+
+
+
+        state = getInitialState();
+        roundState = getInitialRoundState()
+        
+        // roundState.buttons.initGame.canTrigger = true;
+        // buttonsState = {}
+        // actualPhase = resetPhase()
+
       }
+
+
+      if(!allInsideSquares && !submitElement.classList.contains('invisible')) {
+        setInvisibleElement(submitElement.className)
+      }
+
+     
 
       drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS,
                      {color: '#00FF00', lineWidth: 5});
@@ -306,7 +359,7 @@ hands.onResults(render);
 
 const camera = new Camera(videoElement, {
   onFrame: async () => {
-    await hands.send({image: videoElement});
+    await hands.send({ image: videoElement });
   },
   width: 1280,
   height: 720
