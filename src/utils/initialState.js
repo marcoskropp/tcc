@@ -1,4 +1,3 @@
-import { generateSequence } from './functions.js'
 import { firstPhase, secondPhase, thirdPhase } from './phases.js';
 
 let actualSequenceLenght = 4;
@@ -50,9 +49,7 @@ const getInitialState = () => {
 
 const getInitialRoundState = () => {
   return {
-    colorSequence: generateSequence(4, actualSequenceLenght),
     usedAnimals: [],
-    userTime: false,
     round: 1,
     roundSequence: [firstPhase, secondPhase, thirdPhase],
     buttons: {

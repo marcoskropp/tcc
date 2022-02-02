@@ -23,7 +23,7 @@ const firstPhase = (roundState, actualPhase, buttonsState) => {
         squares, 
         classificationsTranslate: classificationsTranslateSelected,  
         classifications: classificationsSelected, 
-        quantityOfAnimalsPerSquare: 1,
+        quantityOfAnimalsPerSquare: 2,
         actualPhase,
         buttonsState,
         roundState
@@ -52,8 +52,8 @@ const secondPhase = (roundState, actualPhase, buttonsState) => {
     actualPhase = generatePhase({ 
         squares, 
         classificationsTranslate: classificationsTranslateSelected,  
-        classifications: classificationsSelected, 
-        quantityOfAnimalsPerSquare: 1,
+        classifications: classificationsSelected,  
+        quantityOfAnimalsPerSquare: 2,
         actualPhase,
         buttonsState,
         roundState
@@ -83,7 +83,7 @@ const thirdPhase = (roundState, actualPhase, buttonsState) => {
         squares, 
         classificationsTranslate: classificationsTranslateSelected,  
         classifications: classificationsSelected, 
-        quantityOfAnimalsPerSquare: 1,
+        quantityOfAnimalsPerSquare: 2,
         actualPhase,
         buttonsState,
         roundState

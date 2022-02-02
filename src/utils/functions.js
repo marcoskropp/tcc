@@ -1,7 +1,7 @@
 import { createAnimalElement, setVisibileElement, setElementCoordinates } from './screenFunctions.js'
 
 
-const TOTAL_ROUNDS = 2;
+const TOTAL_ROUNDS = 3;
 
 const COLORS = {
     BLUE_PRIMARY : "#4287f5",
@@ -23,14 +23,6 @@ function getRandomCoordinate() {
   const y = getRandomInt(10, 630)
 
   return { x, y }
-}
-
-function generateSequence(quantityOfButtons, quantityOfSequence) {
-  let sequence = [];
-  for (let i = 0; i < quantityOfSequence; i++) {
-    // sequence.push(getRandomInt(quantityOfButtons));
-  }
-  return sequence;
 }
 
 function touched(landmarkIndicator, landmarkThumb, button) {
@@ -203,16 +195,16 @@ const generatePhase = ({
   return actualPhase
 }
 
-const validateSquare = (square, index, buttonsState, roundState) => {
-  const buttonStateKeys = Object.keys(buttonsState)
+const validateSquare = (square, index, animalsState, roundState) => {
+  const animalsStateKeys = Object.keys(animalsState)
 
-  if(isInsideSquare(square, buttonsState[buttonStateKeys[index]])) {
+  if(isInsideSquare(square, animalsState[animalsStateKeys[index]])) {
     const animalsInSquare = roundState.roundSquares[`${square.name}Animals`]
 
     if(animalsInSquare && !animalsInSquare.find(
-      (animal) => animal === buttonStateKeys[index])
+      (animal) => animal === animalsStateKeys[index])
     ) {
-      roundState.roundSquares[`${square.name}Animals`].push(buttonStateKeys[index])
+      roundState.roundSquares[`${square.name}Animals`].push(animalsStateKeys[index])
     }
   }
 }
@@ -220,18 +212,18 @@ const validateSquare = (square, index, buttonsState, roundState) => {
 const verifyRightSquare = (
   animals, 
   classification, 
-  buttonStateKey, 
+  animalStateKey, 
   rightSquareCounter, 
   wrongSquareCounter,
   actualPhase
 ) => {
   const isAnimalInSquare = !!animals.find(
-    (animal) => animal === buttonStateKey
+    (animal) => animal === animalStateKey
   )
 
   if(isAnimalInSquare) {
     const isAnimalInRightSquare = !!actualPhase.classifications[classification].find(
-      (animal) => animal === buttonStateKey
+      (animal) => animal === animalStateKey
     )
     
     if(isAnimalInRightSquare) {
@@ -282,7 +274,6 @@ export {
     TOTAL_ROUNDS, 
     COLORS, 
     getRandomInt, 
-    generateSequence, 
     touched, 
     getOffset,
     isInsideSquare,

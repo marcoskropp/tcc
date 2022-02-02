@@ -1,5 +1,5 @@
 import { 
-  TOTAL_ROUNDS, COLORS, getRandomInt, generateSequence, touched, 
+  TOTAL_ROUNDS, COLORS, getRandomInt, touched, 
   getInitialState, getInitialRoundState, getOffset, 
   isInsideSquare, getRandomCoordinate, images, classifications,
   classificationsTranslate, isValidCoordinate, verifyDrag, createButton,
