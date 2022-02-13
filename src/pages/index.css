@@ -193,8 +193,13 @@ img {
   top: 150px;
   left: 465px;
   width: 350px;
-  height: 100px;
+  height: 125px;
   opacity: 0.9;
+}
+
+.wrong-animals {
+  padding-bottom: 10px;
+  padding-top: 5px;
 }
 
 .win-game {

@@ -31,6 +31,40 @@ const images = {
   pufferFish: 'puffer-fish',
   snail: 'snail',
 }
+
+const animalsTranslatedNames = {
+  alligator: 'Jacaré',
+  ant: 'Formiga',
+  bee: 'Abelha',
+  beetle: 'Besouro',
+  canary: 'Canário',
+  cat: 'Gato',
+  chicken: 'Galinha',
+  cow: 'Vaca',
+  cricket: 'cigarra',
+  dog: 'Cachorro',
+  duck: 'Pato',
+  eagle: 'Águia',
+  frog: 'Sapo',
+  horse: 'Cavalo',
+  ladybug: 'Joaninha',
+  monkey: 'Macaco',
+  owl: 'Coruja', 
+  peacock: 'Pavão',
+  penguin: 'Pinguin',
+  scorpion: 'Escorpião', 
+  shark: 'Tubarão', 
+  snake:'Cobra', 
+  spider: 'Aranha',
+  tiger: 'Tigre', 
+  turtle: 'Tartaruga', 
+  whale: 'Baleia',
+  wolf: 'Lobo', 
+  chameleon: 'Camaleão',
+  fish: 'Peixe',
+  pufferFish: 'Baiacu',
+  snail: 'Lesma',
+}
   
   const mammals = [
     images.cat, images.dog, images.cow, images.wolf, images.tiger, images.horse, 
@@ -103,5 +137,6 @@ const images = {
   export { 
     images, 
     classifications,
-    classificationsTranslate
+    classificationsTranslate,
+    animalsTranslatedNames
   }

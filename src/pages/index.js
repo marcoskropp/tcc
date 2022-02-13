@@ -5,7 +5,7 @@ import {
   classificationsTranslate, isValidCoordinate, verifyDrag, createButton,
   verifyTouched, verifyTouchedAndDrag, getValidAnimal, generateAnimal, 
   generatePhase, setVisibileElement, setInvisibleElement, validateSquare,
-  verifyRightSquare, verifySquare, firstPhase, secondPhase
+  verifyRightSquare, verifySquare, firstPhase, secondPhase, animalsTranslatedNames
 } from '../utils/index.js'
 
 const videoElement = document.getElementsByClassName('input_video')[0];
@@ -175,7 +175,18 @@ const verifyResults = () => {
   } else {
     const lostGameButton = roundState.buttons.lostGame
     setVisibileElement(lostGameButton.className)
-    // actualPhase = resetPhase()
+
+
+    const wrongAnimalsTranslate = wrongAnimals.map(wrongAnimal => {
+      return animalsTranslatedNames[wrongAnimal] 
+    })
+    const wrongAnimalsText = wrongAnimalsTranslate.join(', ')
+    console.log('wrongAnimalsTranslate',wrongAnimalsTranslate, 'wrongAnimalsText: ', wrongAnimalsText)
+
+    const wrongAnimalsElement = document.getElementsByClassName('wrong-animals')[0]
+    
+    wrongAnimalsElement.innerHTML = wrongAnimalsText
+     //actualPhase = resetPhase()
     
 
     // console.log('roundState.usedAnimals', roundState.usedAnimals)
