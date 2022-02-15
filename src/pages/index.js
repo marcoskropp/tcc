@@ -185,7 +185,7 @@ const verifyResults = () => {
 
     const wrongAnimalsElement = document.getElementsByClassName('wrong-animals')[0]
     
-    wrongAnimalsElement.innerHTML = wrongAnimalsText
+    wrongAnimalsElement.innerHTML = `Animais incorretos: ${wrongAnimalsText}`
      //actualPhase = resetPhase()
     
 
@@ -349,9 +349,9 @@ function render(results) {
 
      
 
-      drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS,
-                     {color: '#00FF00', lineWidth: 5});
-      drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
+      // drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS,
+      //                {color: '#00FF00', lineWidth: 5});
+      // drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
     }
   }
   canvasCtx.restore();
